@@ -1,0 +1,131 @@
+Cuando visual studio crea un proyecto .NET MAUI, se generan cuatro archivos de codigo importantes. Estos se pueden ver
+desde el panel "Explorador de soluciones" de visual stuido.
+
+Etos archivos ayudan a configurar y ejecutar la aplicacion .NET MAUI. Cada archivo tiene una finalidad diferente:
+ ***Programa Maui.cs
+Este es un archivo de codigo que inicia la aplicacion. El codigo de este archivo sirve como punto de entrada multiplataforma
+de la aplicacion, que configura e inicia la aplicacion. El codigo de inicio de la plantilla apunta a la App clase definida por el
+archivo App.xaml.
+ 
+  ***App.xaml y App.xaml.cs
+Para simplificar, ambos archivos se denominan un solo archivo. Generalmente, hay dos archivos con cualquier archivo XAML:el archivo
+.xaml en si y un archivo de codigo correspondiente que es un elemento secundario de este en el Explorador de soluciones. El archivo
+.xaml contiene el marcado XAML y el archivo de codigo contiene el codigo creado por el usuario para interactuar con el marcado XAML.
+
+El archivo App.xaml contiene recursos XAML para toda la aplicacion, como colores, estilos o plantillas. El archivo App.xaml.cs generalmente
+contiene codigo que crea una instancia de la aplicacion Shell. 
+  
+   ***MainPage.xaml y MainPage.xaml.cs
+Esta es la pagina de inicio que muestra la aplicacion. El archivo MainPage.xaml define la interfaz de usuario de la pagina. 
+MainPage.xaml.cs contiene el codigo subyacente para el XAML, como el codigo para un evento de clic de boton.
+
+----
+
+When visual stuido creates a .NET MAUI project, four important code files are generated. These can be seen in the solution Explorer 
+pane of visual studi.
+
+These files help get the .NET MAUI app configured and running. Each file servers a different pupose, described below:
+
+ *** MauiProgram.cs
+This is a code file that bootstraps your app. The code in this file servers as the cross-platform entry point of the app, wich configures 
+and starts the app. The template startup code points to the App class defined by the App.xaml file.
+
+ *** App.xaml and App.xaml.cs
+Just to keep things simple, noth of these files are referred to as a single file. There are generally two files with any XAML file, the 
+.xaml file itself, and a corresponding code file that is a child item of it in the Solution Explorer. The .xaml file contains XAML markup 
+interact with the XAML markup.
+
+The App.xaml file contains app-wide XAML resources, such as colors, styles, or templates. The App.xaml.cs file generally contains code that 
+instantiates the Shell application. In this project, it points to the AppShell class.
+
+  *** AppShell.xaml and AppShell.xaml.cs
+This file defines the AppShell class, which is used to define visual hierachy of the app.
+ 
+  *** MainPage.xaml and MainPage.xaml.cs
+This is the startup page displayed by the app. The MainPage.xaml file defines the UI (user interface) of the page. MainPage.xaml.cs contains the 
+code-behind for the XAML, like code for a button click event.
+
+--------------------------------------------------------
+
+<ContentPage> es el objeto raiz de la AboutPage clase.
+
+<VerticalStackLayout> es el unico objeto secundario de ContentPage. ContentPage solo puede tener un objeto secundario. El tipo VerticalStackLayout
+puede tener varios objetos secundarios. Este control de diserño organiza sus objetos secundarios verticalmente, uno tras otro.
+
+<HorizontalStackLayout> funciona igual que <VerticalStackLayout>, excepto que sus hijos estan dispuestos horizontalmente.
+
+<Image> muestra una imagen, en este caso se utiliza la dotnet_bot.png imagen que viene con cada proyecto .NET MAUI.
+
+**IMPORTANTE**
+El archivo agregado al proyecto es en realidad botnet_bot.svg .NET MAUI convierte archivos de graficos vectoriales escalabrles (SVG) en archivos de graficos 
+de red portatiles (PNG) segun el dispositivo de destino. Por lo tanto, al agregar un archivo SVG a su proyecto de aplicacion .NET MAUI, se debe hacer referencia
+a el desde XAML o C# con una .png extension. La unica referencia al archivos SVG debe estar en su archivo de proyecto.
+
+<Label> Los controles muestran el texto.
+
+<Button> El usuario puede presionar los controles para generar el Clicked evento. Puede ejecutar codigo en respuesta al Clicked evento.
+
+**Clicked = "LearMore_Clicked"
+ El clicked evento del boton se asigna al LearnMore_Clicked controlador de eventos, que se definira en el archivo de codigo subyacente.
+
+-------------------
+
+<ContentPage> Is the root object for the AboutPage class.
+
+<VerticalStackLayout> Is the only child object of the ContentPage. ContentPage can only have one child object. The VerticalStackLayout type 
+can have multiple children. This layout control arranges its children vertically, one after the other.
+
+<HorizontalStackLayout> Operates the same as <VerticalStackLayout>, except its children are arrenger horizontally.
+
+<Image> Displays an image, in this chase it's using the dotnet_bot.png image that comes with every .NET MAUI project.
+
+***IMPORTANT***
+ The file added to the project is actually dotnet_bot.svg. .NET MAUI converts Scalable Vector Graphics (SVG) files to Portable Network 
+Graphic (PNG) files based on the target device. Therefore, when adding an SVG file to your .NET MAUI app project, it should 
+be referenced from XAML or C# with a .png extension. The only reference to the SVG file should be in your project file.
+
+<Label> Controls display text.
+
+<Button> Controls can be pressed by the user, which raise the Clicked event. You can run code in response to the Clicked event.
+
+**Clicked="LearnMore_Clicked"
+ The clicked event of the button is assigned to the LearMore_Clicked event handler, which will be defined in the code-behind file.
+
+-------------------------
+
+<Shell> es el objeto raiz del marcado XAML.
+
+<TabBar> es el contenido del Shell.
+
+ Dos <ShellContent> objetos dentro del <TabBar>. Antes de reemplazar el codigo de la plantilla, habia un solo <ShellContent>
+objeto que apuntaba a la MainPage pagina.
+
+Los TabBar y sus hijos no representan ningun elemento de la interfaz de usuario, sino la organizacion de la jerarquia visual de la 
+aplicacion. Shell toma estos objetos y produce la interfaz de usuario para el contenido, con una barra en la parte superior que representa
+cada pagina. La ShellContent.Icon propiedad de cada pagina utiliza una sintaxis especial:{Onplatform...}. Esta sintaxis se procesa cuando
+se compilan las paginas XAML para cada plataforma y con ella se puede especificar un valor de propiedad para cada plataforma. En este caso, 
+cada plataforma utiliza el icon_about.png icono de forma predeterminada, pero iOs y MacCatalyst utilizaran icon_about_ios.png.
+
+Cada <ShellContent> objeto apunta a una pagina para mostrar. Esto se establece mediante la ContentTemplate propiedad.
+
+----------------------------
+
+<Shell> is the root object of the XAML markup.
+
+<TabBar> is the content of the Shell.
+
+ Two <ShellContent> objects inside of the <TabBar>. Before you replaced the temmplate code, thewe was a single <ShellContent> object, pointing 
+to the MainPage page.
+
+The TabBar and its children don't represent any user interface elements, but rather the organization of the app's visual hierarchy. Shell takes
+these objects and produces the user interface for the content, with a bar at the top representing each page. The ShellContentIcon property for each page 
+uses special syntax:{OnPlatform...}. This sintax is processed when the XAML pages are compiled for each platform, and with it you can specify a property 
+value for each platform. In this case, every platform uses icon_about.png icon by default, but iOS and MacCatalyst will use icon_about_ios.png.
+
+Each <ShellContent> object is poiting to a page to display.
+
+
+
+
+
+
