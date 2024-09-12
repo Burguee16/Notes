@@ -125,7 +125,80 @@ value for each platform. In this case, every platform uses icon_about.png icon b
 Each <ShellContent> object is poiting to a page to display.
 
 
+--------------
 
+<VerticalStackLayout> organiza sus controles secundarios verticalmente, uno debajo del otro.
+
+<Editor> es un control de editor de texto de varias lineas y el primer control dentro de VerticalStackLayout.
+
+<Grid> es un control de diseño y es el segundo control dentro de VerticalStackLayout.
+Este control define columnas y flas para crear celdas. Los controles secundarios se colocan dentro de esas celdas.
+
+De forma predeterminada, el control Grid contiene una sola fila y columna, lo que crea una sola celda. Las columnas
+se defienen con un ancho, y el * valor de ancho indica a la columna que debe llenar la mayor cantidad de espacio posible.
+El fragmento anterior definio dos columnas, ambas utilizando la mayor cantidad de espacio posible. El fragmento anteior
+definio dos columnas, ambas utilizando la mayor cantidad de espacio posible, lo que distriubuye uniformemente las columnas
+en el espacio asignado: ColumnDefinitios="*,*. Los tamaños de columnas estan separados por un , caracter.
+
+Las columnas y filas definidas por una cuadricula se indexan a partir de 0, Por lo tanto, la primera columna seria el indice 0, 
+la segunda columna seria el indice 1, y asi sucesivamente.
+
+Hay dos <Button> controles dentro <Grid> y se les asginla una columna. Si un control secundario no define una asignacion de
+columna, se le asigna autimaticamente a la primera columna. En este marcado, el primer boton es el boton "Guardar" y se asigna
+automaticamente a la primera columna, la columna 0. El segundo boton es el boton "Eliminar" y se asigna a la segunda columna, la columna 1.
+
+----------------------------
+
+<VerticalStackLayout> arranges its children controls vertically, one below the other.
+
+<Editor> is a multi-line text editor control, and is the first control inside of VerticalStackLayout.
+
+<Grid> is a layout control, and is the second control inside of VerticalStackLayuot.
+
+This control defines columns ands rows to create cells. Child controls are placen within those cells.
+
+By default, the Grid control contains a single row and column, creating a single cell. Columns are defined with
+a width, and the * value for width tells the column to fill up as much space as possible. The previus snippet defined two 
+columns, both using as much space as possible, which evenly distributes the columns in the alloted space: ColumnnDefinitions="*,*". The
+column sizes are separated by a , character.
+
+Columns and rows defined by a Grid are indexed starting at 0. So the first column would be index 0, the second columns is index 1, and o on.
+
+Two <button> controls are inside the <Grid> and assigned a column. If a child control doesn´t define a column 
+assignment . It's automatically assigned to the first column. In this markup, the first button is the "Save" button and automatically assigned
+to the first column, column 0. The second button is the "Delete" button and assigned to the second column, column 1.
+
+------------------------------------------
+
+Cuando agrega un nuevo archivo XAML, el codigo subyacente contiene una sola linea en el constructor, una llamada al InitializeComponent metodo:
+
+El initializeComponent metodo lee el codigo XAML e inicializa todos los objetos definidos por el codigo. Los objetos estan conectados en sus relaciones
+padre-hijo, y los controladores de eventos definidos en el codigo se adjuntan a los eventos establecidos en el codigo XAML.
+
+-----------
+
+When you add a new XAML file, the code-behing contains a single line in the constructor, a call to the InitializeComponent method:
+The InitializeComponent method reads the XAML markup and initializes all of the objects defined by the markup. The objects are connected
+in their parent-child relationships, and the event handlers defined in code are attached to events set in the XAML.
+
+----------------
+private void SaveButton_Clicked(object sender, EventArgs e)
+{
+    // Save the file.
+    File.WriteAllText(_fileName, TextEditor.Text);
+}
+
+El SaveButtonClicked escribe el texto en el control Editor, en el archivo representado por la _filename varibale.
+
+El DeleteButton_Clicked primero verifica si el archivo representado por la _fileName variable existe y, si existe, lo elimina.
+A continuacion, se borra el texto del control Editor.
+
+-----------
+
+The SaveButton_Clicked method writes the text in the Editor control, to the file represented by the _fileName variable.
+
+The DeleteButton_Clicked method first checks if the file represented by the _fileName variable, and if it exist, deletes it.
+Next, the Editor control's text is cleared.
 
 
 
