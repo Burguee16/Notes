@@ -200,5 +200,95 @@ The SaveButton_Clicked method writes the text in the Editor control, to the file
 The DeleteButton_Clicked method first checks if the file represented by the _fileName variable, and if it exist, deletes it.
 Next, the Editor control's text is cleared.
 
+------------------------------------------------
 
+Vincular datos a la interfaz de usuario y navegar por las paginas 
+
+En los pasos anteriores del tutorial, agrego dos paginas al proyecto:NotePage y AboutPage. Las paginas representan
+una vista de datos. La NotePage es una "vista" de muestra de "datos de notas" y la AboutPage es una "vista" que muestra
+"datos de informacion de la aplicacion. Ambas vistas tienen un modelo de esos datos codificado o incrustado en ellas, y debera 
+separar el modelo de datos de la vista.
+
+¿Cual es el beneficio de separar el modelo de la vista?
+Permite diseñar la vista para representar e interactuar con cualquier parte del modelo sin preocuparse por el codigo real
+que implementa el modelo. Esto se logra mediante el enlace de datos.
+
+-------------------
+
+Bind data to the UI and navigate pages
+
+In the previous steps of the tutorial, you added two pages to the project: NotePage and AboutPage. The pages represent a view 
+of data. The NotePages is a "view" that displays "note data" and the AboutPage is a "view" that displays "app information data".
+Both of theses views have a model of that data hardcoded, or embebbed in them, and you'll need to separate the data model from 
+the view.
+
+What is the benefit of separating the model from the view?
+It allows tou to desing the view to represent and interact with ant portion of the model without worrying about the actual code 
+that implements the mode. This is accomplished using data binding, something that will be presented later in this tutorial. For now,
+though, lets restructure the project.
+
+-------------------------------
+
+* xmlns:models="clr-namespace:Notes.Models"
+
+Esta linea asigna el Note.Models espacio de nombres .NET al models espacio de nombres XML.
+
+* La bindingContext propiedad de ContentPage se establece en una instancia de la Note.Models.About clase, utilizando el espacio
+de nombres XML y el objeto de models:About. Esto se establecio utilizando la sintaxis de elemento de propiedad en lugar de un 
+atributo XML.
+
+****IMPORTANTE***
+Hasta ahora, las propiedades se han establecido mediante un atributo XML. Esto funciona muy bien para valores simples como una
+Label.Fontysize propiedad. Pero si el valor de la propiedad es mas complejo, debe utilizar la sintaxis de elemento de propiedad
+para crear el objeto. Considere el siguiente ejemplo de creacion de una etiqueta con su FontSize propiedad establecida:
+  <Label FontSize="22" />
+La misma FontSize propiedad se puede configurar utilizando la sintaxis del elemento de propiedad:
+  <Label>
+    <Label.FontSize>
+        22
+    </Label.FontSize>
+</Label>
+
+*Se modificio el valor de propiedad de tres <Label> controles Text de una cadena codificada a una sintaxis de enlace {Binding PATH}.
+
+{Binging} La sintaxis se procesa en tiempo de ejecucion, lo que permite que el valor devuelto desde el enlace sea dinamico. La PATH
+parte de {Binding PATH} es la ruta de la propiedad a la que se enlazara. La propiedad proviene del control actual BindingContext. Con
+el <Label> control, BindingContext no esta definido. El contexto se hereda del padre cuando el control lo desconfigura, que en este caso,
+el contexto de la configuracion del objeto padre es el objeto raiz: ContentPage.
+
+El objeto final en la pagina Acerca de es actualizar el boton que se abre con un clic en una pagina web. La URL se incluyo en el codigo subyacente,
+pero deveria provenir del modelo que se encuentra en la BindigContext propiedad.
+
+-------------------
+
+*xmlns:models="clr-namespace:Notes.Models"
+
+This line maps the Notes.Models .NET namespace to the models XML namespace.
+
+The bindingContext property of the ContentPage is set to an instance of the Note.Models.About class, using the XML namespace and object of
+models:About. This was set using property elements syntax instead of an XML attribute.
+
+***IMPORTANT***
+Until now, properties have been set using an XML attribute. This works great for simple values, such as a Label.FontSize property. But if the 
+property value is more complex, you must use property elements syntax to create the object. Consider the following example of a creating a label 
+with its FontSize property  set:
+ 
+  <Label FontSize="22" />
+
+The same FontSize property can be set using property element syntax:
+  <Label>
+    <Label.FontSize>
+        22
+    </Label.FontSize>
+</Label>
+
+*Three <Label> controls had their Text property valye changed from a hardcoded string to binding syntax: {Bindig PATH}.
+
+{Binding} syntax is processed at run-time, allowing the value returned from the binding to be dynamic. The PATH portion 
+of {Binding PATH} is the property path to bind to. The property comes from the current control's BindingContext. With the
+<Label> control, BindingContext is unset. Context is inherited from the parent when it's unset by the control, which in 
+this case, the parent object setting context is the root object: ContetPage.
+
+The object in the BindingContext is an instance of the About model. The binding path of one of the labels binds the Label.Text
+property to the About.Title property.
 
