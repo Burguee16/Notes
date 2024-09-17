@@ -1,0 +1,201 @@
+Entender MVVM
+
+La experiencia del desarrollador de .NET MAUI generalmente implica crear una interfaz de usuario en XAML y luego
+agregar codigo subyacente que opera en la interfaz de usuario. Pueden surgir problemas de mantenimiento complejos a medida
+que las aplicaciones se modifican y crecenen tamaño y alcance. Estos problemas incluyen el acoplamiento estrecho entre
+los controles de la interfaz de usuariio y la logica empresarial, lo que aumenta el costo de realiar modificaciones en la interfaz
+de usuario y la dificultad de realizar pruebas unitarias de dicho codigo.
+
+El patron modelo-vista-modelo-vista (MVVM) ayuda a separar claramente la logia de presentacion y de negocios de una aplicacion de su
+interfaz  de usuario (UI). Mantener una separacion clara entre la logica de la aplicacion y la UI ayuda a abordar numerosos problemas de
+desarrollo y hace que una aplicacion sea mas facil de probar, mantener y desarrollar. Tambien puede mejorar significativamente las oportunidades
+de reuitilizacion de codigo y permite que los desarrolladores y los diseñadores de UI colaboren mas facilmente al desarrollar sus 
+respectivas partes de una aplicacion.
+
+-------------
+
+Understand MVVM
+
+The .NET MAUI developer experience typically involves creating a user interface in XAML, and the adding code-behind that operates  on the
+user interface. Complex maintenance issues can arise as apps are modified and grow in size and scope. Theses issues include the tigth coupling 
+between the UI controls and the buisness logic, which increases the cost of making UI modifications, and the difficulty of unit testing souch code.
+
+The model-view-viewmodel(MVVM) pattern helps cleanly separate an app's buisness and presentation logic from its user interface (UI). Maintaining a
+clean separation between app logic and the UI helps address numerous development issues and makes an app easier to test, maintain, and evolve. It can
+also significantly improve code reuse opportunities and allows developers and UI designers to collaborate more easily when developing their respective
+parts of an app.
+
+-----------------
+
+El patron
+
+El patron MVVM consta de tres componentes principales: el modelo, la vista y el modelo de vista. Cada uno de ellos cumple una funcion especifica.
+El siguiente diagrama muestra las relaciones entre los componentes:
+   VIEW----->VIEW MODEL-------------->MODEL
+
+Ademas de comprender las responsabilidades de cada componente, tambien es importante comprender como interactuan. En un nivel alto, la vista 
+"conoce" el modelo, pero el modelo no conoce el modelo de vista, y el modelo de vista no conoce a la vista. Por lo tanto, el modelo de vista aisla la vista
+del modelo y permite que el modelo evolucione independientemente de la vista.
+
+La clave para usar MVVM de manera efectiva radica en comprender como factorizar el codigo de la aplicacion en las clases correctas y como interactuan
+las clases.
+
+-------------
+
+The pattern 
+
+There are three core components in the MVVM pattern: the model, the view, and the view model. Each servers a distrinct purpose. The following diagram shows 
+the relationships between the three components.
+
+        VIEW----------->VIEW MODEL------------> MODEL
+
+In addition to understanding the responsabilities of each component, it's also important to understand how they interact. At a higth level, the view
+"knows about" the view model, and the view model "knows about" the model, but the model is unaware of the view model, and the view model is unaware of the view.
+Therefore, the view model isolates the view from the model, and allows the model to evolve independently of the view.
+
+The key to using MVVM effectively is understanding how to factor app code into the correct classes and how the classes interact.
+
+----------------
+
+Vista 
+
+La vista es responsable de definir la estructura, el diseño y la apariencia de lo que el usuario ve en la pantalla. Lo ideal es que cada
+vista se defina en XAML, con un codigo subyacente limitado que no contiene logica empresarial. Sin embargo, en algunos casos, el codigo subyacente puede 
+contener logica de interfaz de usuario que implemente un comportamiento visual que es dificil de expresar en XAML, como animaciones.
+
+---------------
+
+View
+
+The view is responsible for defining the structure, layout, and appareance of what the user sees on screen. Ideally, each view is defined in XAML, with
+a limited code-behind that doesn't contain business logic. However, in some cases, the code-behind migth contain UI logic that implements visual bhavior 
+that is difficult to express in XAML, such as animations.
+
+----------------
+
+Modelo de vista
+
+El modelo de vista implementa propiedades y comandos a los que la vista puede vincular datos y notifica a la vista de cualquier cambio de estado a traves
+de eventos de notificacion de cambios. Las propiedades y los comandos que proporciona el modelo de vista definen la funcionalidad que ofrecera la interfaz de usuario,
+pero la vista determina como se mostrara esta funcionalidad.
+
+El modelo de vita tambien es reponsable de coordinar las interacciones de vista con cualquier clase de modelo que sea necesaria. Normalmente, existe una relacion de uno a 
+muchos entre el modelo de vista y las clases del modelo.
+
+Cada modelo de vista proporciona datos de un modelo en un formato que la vista puede consumir facilmente. Para lograr esto, el modelo de vista a veces realiza una conversion
+de datos. Colocar esta conversion de datos en el modelo de vista es una buena idea porque proporciona propiedades a las que la vista puede vincularse. Por ejemplo, el modelo
+de vista puede combinar los valores de dos propiedades para que sea mas facil de mostrar en la vista.
+
+***IMPORTANTE***
+.NET MAUI organiza las actualizaciones de enlaces en el subproceso de la interfaz de usuario. Al utilizar MVVM, esto le permite actualizar las propiedades del modelo de vista 
+enlazadas a datos desde cualquier subproceso, y el motor de enlaces de .NET MAUI lleva las actualizaciones al subproceso de la interfaz de usuario.
+
+------------------
+
+ViewModel
+
+The view model implements properties and commands to which the view can data bind to, and notifies the view of any state changes though change notification events. 
+The properties and commands that the view model provides define the functionality to be offered by the UI, but the view determines how that functionality is to be displayed.
+
+The view model is also responsible for coordinating the view's interactions with any model classes that are required. There's typically a on-to-many relationship between the view 
+model and the model classes.
+
+Each view model provides data from a model in a form that the view can easily consume. To accomplish this, the view model sometimes performs data conversion. Placing this data conversion 
+in the view model is a good idea because it provides properties that the view can bind to. For example, the view model migth combine the values of two properties to make it easier to 
+display by the view.
+
+***IMPORTANT***
+.NET MAUI marshals binding updates to the UI thread. When using MVVM this enables you to update data-bound viewmodel properties from any thread, with .NET MAUI's binding engine bringing the 
+updates to the UI thread.
+
+----------
+
+Modelo 
+
+Las clases de modelo son clases no visuales que encapsulan los datos de la aplicacion. Por lo tanto, se puede pensar que el modelo representa el modelo de dominio de la 
+aplicacion, que generalmente incluye un modelo de datos junto con la logica empresarial y de validacion.
+
+---------------
+
+Model
+
+Model classes are non-visual classes that encapsulate the app's data. Therefore, the model can be though of as representing the app's domain model, wich usually includes 
+a data model along with buisnees and validation logic.
+
+
+----------------------------------------
+
+Limpiar el modelo
+
+En el tutorial anterior, los tipos de modelo actuaban como modelo (datos) y como modelo de vista (preparacion de datos), que se asignaba directamente a una vista.
+La siguiente tabla describe el modelo:
+
+MODELO/ABOUT.CS   El About modelo. Contiene campos de solo lectura que desriben la aplicacion en si, como el titulo y la version de la aplicacion.
+
+MODELO/NOTE.CS    El Note modelo. Representa una nota.
+
+MODELO/ALLNOTES.CS   El AllNotes modelo carga todas las notas del dispositivo en una coleccion.
+
+Si pensamos en la aplcacion en si, solo hay un dato que utiliza la aplicacion: el Note. Las notas se cargan desde el dispositivo y se editan 
+a traves de la interfaz de usuario de la aplicacion. En realidad, no hay necesidad de los modelos About y AllNotes. 
+
+--------------------
+
+Clean up the model
+
+In the previous tutorial, the model types were acting both as the model (data) and as a view model (data preparation), which was mapped directly to 
+a view. The following talbe describes the model:
+
+MODEL/ABOUT.CS  The About model . Contains read-only fields that describe the app itself, such as the app title and version.
+
+MODELS/NOTE.CS  The Note model. Represents a note.
+
+MODELS/ALLNOTE.CS  The AllNote model. Loads all of the notes on the device into a collection.
+
+Thinking about the app itself, there is only one piece of data that is used by the app, the Note. Notes are loaded from the device,
+saved to the device, and edited trough the app UI. There really isn´t a need for the About and AllNotes models.
+
+-----------------
+
+Desacoplar con modelos de vista
+
+La relacion entre vistas y modelos de vista depende en gran medida del sistema de enlaces que proporciona .NET MAUI. La aplicacion ya utiliza
+enlaces en las vistas para mostrar una lista de notas y presentar el texto y la fecha de una sola nota. La logica de la aplicacion actualmente 
+proporciona el codigo subyacente de la vista y esta directamente vinculada a la vista. Por ejemplo, cuando un usuario esta editando una nota y presiona
+el boton Guardar Cicked, se genera el evento del boton. Luego, el codigo subyacente del controlador de eventos guarda el texto de la nota en un archivo 
+y navega a la pantalla anterior.
+
+Tener logica de aplicacion en el codigo subyacente de una vista puede convertirse en un problema cuando la vista cambia. Por ejemplo, si el boton
+se reemplaza con un control de entrada diferente o se cambia el nombre de un control, los controladores de eventos pueden dejar de ser validos.
+Independientemente de como esta diseñada la vista, el proposito de la vista es invocar algun tipo de logica de aplicacion y presentar informacion al usuario.
+Para esta aplicacion, el Save boton guarda la nota y luego vuelve a navegar a la pantalla anterior.
+
+El modelo de vista la da a la aplicacion un lugar especifico para colocar la logica de la aplicacion, independientemente de como este diseñada la interfaz de
+usuario o de como se carguen o guarden los datos. El modelo de vista es el pegamento que representa e interactua con el modelo de datos en nombre
+de la vista.
+
+----------------------
+
+Decouple with view models 
+
+The view-to-viewmodel relationship relies heavily on the binding sstem provide by. NET MAUI. The app is already using binding in the views to display a list
+of notes and to present the text and date of a single note. The app logic is currently provided by the view's code-behind and is directly tied to the view.
+For example, when a user is editing a note and presses the Save button, the Clicked event for the button is raised. Then, the code-behind for the event handler 
+saves the note text to a file and navigates to the previous screen.
+
+Having app logic in the code-behind of a view can become an issue when the view changes. For example if the button is replaced with a different input control, 
+or the name of a control ins changed, event handlers may become invalid. Regardless of how the view is seigned, the purpose of the view is to invoke some sort 
+of app logic and to present information to the user. For this app, the Save button is saving the note and then nagiating back to the previus screen.
+
+The viewmodel gives the app a specific place to put the app logic regardless of how the UI designed or how the data is being loaded or saved. The viewmodel is the
+glue that represents and interacts with the dada model on behalf of the view.
+
+--------------------
+
+El fragmento de codigo anterior contiene algunas propiedades que representan informacion sobre la aplicacion, como el nombre y la version. Este fragmento es 
+exactamente el mismo que el modelo Acerca de que eliminaste anteriormente. Sin embargo, este modelo de vista contiene un concepto  nuevo: la ShowMoreInfoCommand
+prpiedad de comando.
+
+Los comandos sonacciones enlazables que invocan codigo y son un exelente lugar para colocar la logica de la aplicacion. En este ejemplo, ShowMoreInfoCommand
+apunta al ShowMoreInfoCommand apunta al ShowMoreInfo metodo, que abre el navegador web a una pagina especifica.
+
