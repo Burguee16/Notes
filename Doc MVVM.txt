@@ -199,3 +199,119 @@ prpiedad de comando.
 Los comandos sonacciones enlazables que invocan codigo y son un exelente lugar para colocar la logica de la aplicacion. En este ejemplo, ShowMoreInfoCommand
 apunta al ShowMoreInfoCommand apunta al ShowMoreInfo metodo, que abre el navegador web a una pagina especifica.
 
+-------------
+Crear el modelo de vista de notas
+
+El objetivo de actualizar la vista de Nota es mover la mayor cantidad de funcionalidad posible fuera de codigo XAML subyacente y colocarla en el modelo de vista de Nota.
+
+Modelo de vista de nota
+
+En funcion de lo que requiere la vista de Nota, el modelo de vista de Nota debe proporcionar los siguientes elementos:
+* El texto de la nota.
+* La fecha y hora que se creo o actualizo la nota por ultima vez.
+* Un comando que guarda la nota.
+* Un comando que elimina la nota.
+
+--------------
+
+Create the Note viewmodel
+
+The goal updating the Note view is te move as much funcionality as possible out of the XAML code-behind and put in the Note viewmodel.
+
+Note viewmodel
+
+Based on what the Note view requires, the Note viewmodel needs to provide the following items:
+* The text of the note.
+* The date/time the note was created or last updated.
+* A command that saves the note.
+* A command that deletes the note.
+
+-------------------------
+
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows.Input;
+
+namespace Notes.ViewModels;
+
+internal class NoteViewModel : ObservableObject, IQueryAttributable
+{
+    private Models.Note _note;
+
+}
+
+Este codigo es el Note modelo de vista en blanco donde agregara propiedades y comadnos para respaldar la vista. Observe que se esta 
+importando Note el espacio de nombres. Este espacio de nombres proporciona el uso como clase base. Aprendera mas sobre esto en el siguiente paso.
+El espacio de nombres tambien se importa. Este espacio de nombres proporciona algunos tipos de comandos que invocan metodos de forma asincronica.
+CommunityToolkit.Mvvm.ComponentModelObservableObjectObservableObjectCommunityToolkit.Mvvm.Input.
+
+El Models.Note modelo se almacena como un campo privado. Las propiedades y los metodos de esta clase utilizaran este campo.
+
+----------
+
+This code is tha blank note viewmodel where you'll add properties and commands to support the Note view. Notice that the  CommunityToolkit.Mvvm.ComponentModel
+namespace is being imported. This namespace provides the ObservableObject  used as the base class. You'll learn more about ObservableObject in the next step.
+The CommunityToolkit.Mvvm.Input namespace is also imported. This namespace provides some command-types that invoke methods asynchronously.
+
+The Models.Note model is being stored as a private field. The properties and methods of this class will use this field.
+
+----------------
+
+Las propiedades Date e Identifier son propiedades simples que simplemente recuperan los valores correspondientes del modelo.
+
+Para las propiedades, la => sintaxis crea una propiedad de solo obtencion donde la declaracion a la derecha => debe evaluarse como un valor a devolver.
+
+La Text propiedad primer verifica si el valor que se establece es un valor diferente. Si el valor es diferente, ese valor se pasa a la propiedad del modelo OnPropertyChanged
+se llama al metodo.
+
+El OnPropertyChanged metodo lo proporciona la ObservableObject clase base. Este metodo utiliza el nombre del codigo de llamada, en este caso, el nombre de la propiedad Text, y genera
+el ObservableObject.PropertyChanged evento. Este evento proporciona el nombre de la propiedad a cualquier suscriptor de eventos. El sistema de enlaces proporcionado por .NET MAUI reconoce
+este evento y actualiza los enlaces relacionados en la interfaz de usuario. Para el modelo de vista Note, cuando la Text propiedad cambia, se genera el evento y se notifica a cualquier elemento
+de la interfaz de usuario que este enlazado a la Text propiedad que la propiedad ha cambiado.
+
+-------------------------
+
+The Date and Indefitier properties are simple properties that just retrieve the corresponding values from the mode.
+
+Tip**
+For properties, the => syntax creates a get-only orperty where the statement to the rigth of => must evaluate to a value to return.
+
+The Text property first checks if the value being set is a different value. If the value is different, that value is passed on to the model's property, and the OnPropertyChanged 
+method is called.
+
+The OnPropertyChanged method is provided by the ObservableObject base class. This method uses the name of the calling code, in this case, the orperty name of Text, and raises the
+ObservableObject.PropertyChanged event. This event supplies the name of the property to any event suscribers. The binding system provided by .NET MAUI recognizes this event, and updates
+any related bindings in the UI. For the Note viewmode, when the Text property changes, the event is raised, and any UI element that is bound to the Text property is notifield that the property changed.
+
+-----------------
+
+Cuando una pagina, o el contexto de enlace de una pagina implementa esta interfaz, los parametros de la cadena de consulta utilizados en la navegacion se pasan al ApplyQueryAttributes metodo. Este modelo
+de vista se utiliza como contexto de enlace para la vista Note.
+Cuando se navega a la vista Note, el contexto de enlace de la vista (este modelo de vista) recibe los parametros de la cadena de consulta utilizados durante la navegacion.
+
+Este codigo comprueba si la load clave se proporciono en el query diccionnario. Si se encuentra esta clave, el valor debe ser el identificador (el nombre del archivo) de la nota que se va a cargar. Esa nota
+se carga y se establece como el objeto de modelo subyacente de esta instancia de modelo de vista.
+
+-----------------
+
+When a page, or the binding context of a page, implements this interface, the query string parameters used in navigation are passed to the ApplyQueryAttributes method. This viewmodel is used as the binding context
+for the Note view. When the Note view is navigated to, the view's binding context (this viewmodel) is passed the query string parameters used during navigation.
+
+This code checks if the load key was provided in the query dictionary. If this ket is found, the value should be the identifier (the file name) of the note to load. That note is loaded and set as the underyling model
+object of this viewmodel instance.
+
+-----------------
+
+El Reload metodo es un metodo auxiliar que actualiza el objeto del modelo de respaldo y lo recarga desde el almacenamiento del dispositivo.
+
+El RefreshProperties metodo es otro metodo auxiliar para garantizar que se notifique a todos los suscriptores vinculados a este objeto que las propiedades Text y Date han cambiado. Dado que el modelo subyacente (el _note campo)
+cambia cuando se carga la nota durante la navegacion, las propiedades Text y Date no se configuran realmente con nuevos valores. Dado que estas propiedades no se configuran directamente, no se 
+notificara a ninguna vinculacion asociada a estas propiedades porque OnPropertyChanged no se llama para cada propiedad. RefreshProperties garantiza que se actualicen las vinculaciones a estas propiedades.
+
+---------------------------
+
+The Reload method is a helper method that refreshes the backing model object, reloading it from device storage.
+
+The RefreshProperties method is another helper method to ensure that any suscribers bound to this object are notified that the Text and Date properties have changed. Since the underlying model (the _note field) is changed
+when the note is loaded during navigation, the Text and Date properties aren't directly set, any bindings attached to those properties wouldn't be notifield because OnPropertChanged isn't called for each property. RefreshProperties ensures
+bindings to these properties are refreshed.
