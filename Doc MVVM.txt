@@ -315,3 +315,120 @@ The Reload method is a helper method that refreshes the backing model object, re
 The RefreshProperties method is another helper method to ensure that any suscribers bound to this object are notified that the Text and Date properties have changed. Since the underlying model (the _note field) is changed
 when the note is loaded during navigation, the Text and Date properties aren't directly set, any bindings attached to those properties wouldn't be notifield because OnPropertChanged isn't called for each property. RefreshProperties ensures
 bindings to these properties are refreshed.
+
+---------------
+
+*En tiempo de ejecucion, cuando se accede a la pagina se muestra una nota en blanco. Esto se debe a que se invoca el constructor sin parametros para el contexto de enlace, el modelo de vista. Si recuerda correctamente el consturctor
+sin parametros para el modelo de vista Note crea una nota en blanco.
+
+*El intellisense del editor XAML muesrta las propieddades disponibles tan pronto como comienzas a escribir {Binding la sintaxis. La sintaxis tambien se valida y te avisa de un valor no valido. Prueba a cambiar la sintaxis de enlace de SaveCommand
+to Save123Command. Si pasas el cursor del raton sobre el texto, notaras que muestra una informacion sobre herramientas que te informa de que no se encuentra Save123Command. Esta notificacion no se considera un error porque los enlaces son dinamicos,  
+es realmente una pequeña advertencia que puede ayudarte a notar cuando escribiste la propiedad incorrecta.
+
+----------------------------------
+
+*At run-time, when the page is navigated to, it displays a blank note. This is because the parameterless constructor for the binding context, the viewmodel, is invoked. If you remember correctly, the parameterless constructor for the Note viewmodel creates
+a blank note.
+
+*The intellisesnse in the XAML editor shows the aviable properties as soon as you start typing {Binding syntax. The syntax is also validated and alerts you of an invalid value. Try changing the binding syntax for the SaveCommand to Save123Command. If you hover
+the mouse cursor over the text, you'll notice that  a tooltip is displayed informing you that Save123Command ins't found. This notification isn't considered an error because bindings are dynamic, it's really a small warning that  may help you notice when you
+typed the wrong property.
+
+-----------------------
+
+El par de vista-modelo final es el modelo de vista Notes y la vista AllNotes. Sin embargo, actualmente, la vista se vincula directamente al modelo, que se elimino al comienzo de este tutorial. El objetivo de actualizar la vista AllNotes es sacar la mayor cantidad 
+de funcionalidad de codigo subyacente XAML y colocarla en el modelo de vista Nuevamente, el beneficio es que la vista puede cambiar su diseño con poco efecto en su codigo.
+
+------------------------
+
+The final viewmodel-view par is the Notes viewmodel and AllNotes view. Currently though, the view is binding directly to the model, which was deleted at the start of this tutorial. The goal in updating the AllNotes views is to moves as much funcionality as possible out of 
+the XAML code-behind and put in the viewmodel. Again, the benefit being that the view can change its desing with litte effect to your code.
+
+----------------------------
+
+La AllNotes propiedad ObservableCollection almacena todas las ntoas cargadas desde el dispositivo. La vista utilizara los dos comandos para activar las acciones de crear una nota o seleccionar una nota existente.
+
+-----------------
+
+The AllNotes property is an ObservableCollection that stores all of the notes loaded from the device. The two commands will be used by the view to trigger the actions of creating a note or selecting an existing note.
+
+----------------
+
+Tenga en cuenta que la AllNotes coleccion utiliza el Models.note.LoadAll metodo para llenar la coleccion observable con  notas. El LoadAll metodo devuelve las notas como Models.Note tipo, pero la coleccion observable es una coleccion de ViewModels.NoteViewModel tipos.
+El codigo utiliza la Select extension Linq para crear instancias de modelos de vista a partir de los modelos de notas ddevueltos desde LoadAll.
+
+----------------
+
+Notice that the AllNotes collection uses the Models.Note.LoaddAll method to fill the observable collection with notes. The LoadAll method returns the notes as the Models.Note type, but the observable collection is a collection of ViewModels.NoteViewModel types.
+The code uses the Selecty Liinq extension to create viewmodel instances from the note models returned from LoadAll.
+
+--------------------
+
+Tenga en cuenta que el NewNoteAsync metodo no toma un parametro, mientras que el SelectNoteAsync si lo hace. Los comandos pueden tener opcionalmente un unico parametro que se proporciona cunado se invoca el comando. Para el SelectNoteAsync metodo, el parametro representa la 
+que se esta seleccionando.
+
+-------------------------------------
+
+Notice that the NewNoteAsync method doesn´t take a parameter while the SelectNoteAsync does. Commands can optionally have a single parameter that is provided when the command is invoked. For the SelectNoteAsync method, the parameter represents the note that's being selected.
+
+----------------
+
+El modelo de vista de notas creado en el paso anterior del tutorial utilizo la navegacion cuando se guardo o elimino la nota. El modelo de vista navego de regreso a la vista AllNotes, con la que esta asociado este modelo de vista. Este codigo detecta si la cadena de consulta 
+contiene la clave deleted o saved la clave. El valor de la clave es el identificador unico de la nota.
+
+Si se elimino la nota, dicha nota coincide en la AllNotes collection con el identificador proporcionado y se elimina.
+
+Hay dos posibles razones por las que se guarda una nota. La nota se acaba de crear o se modifico una nota existente. Si la nota ya esta en la AllNotes coleccion, es una nota que se actualizo. En este caso, solo es necesario actualizar la instancia de la nota en la coleccion.
+Si la nota no esta en la coleccion, es una nota nueva y se debe agregar a la coleccion.
+
+----------------------
+
+The Note viewmodel created in the previous tutorial step, used navigation when the note was saved or deleted. The viewmodel navigated back to the AllNotes view, which this viewmodel is associated with. This code detects if the query string contains either the deleted or saved key.
+The value of the key is the unique identifier of the note.
+
+If the note was deleted, that note is matched in the AllNotes collection by the provied indetifier, and removed.
+
+There are two possible reasons a note is saved. The note was either just created or an existing note was changed. If the note is already int he AllNotes collection, it's a note that was updated. In this case, the note instance in the collection just needs to the refreshed. If the
+note is missing from the collection, it's a new note and must be added to the collection.
+
+----------------------
+
+La barra de herramientas ya no utiliza el Clicked evento y en su lugar utiliza un comando.
+
+El collectionView comando admite las propiedades SlectionChangedCommand y SelectionChangedCommandParameter. En el XAML actualizado, la SelectionChangedCommand propiedad esta vinculada al modelo de vista SelectNoteCommand, lo que significa que el comando se invoca cuando cambia el 
+elemento seleccionado. Cuando se invoca el comando, el SelectionChangedCommandParameter valor de la propiedad de pasa al comando.
+
+---------------
+
+The toolbar no longer uses the Clicked event and instead uses a command.
+
+The CollectionView supports commanding with the SelectionChangedCommand and SelectionChangedCommandParameter properties. In the updated  XAML, the SelectionChangedCommand property is bound to the viewmodel's SelectNoteCommand, wich means the command
+is invoked, the SelectionChangedCommandParameter property value is passed to the command.
+
+------------------
+
+Permitir seleccionar una nota dos veces 
+
+En la vista AllNotes, CollectionView se muestran todas las notas, pero no se permite seleccionar la misma nota dos veces. Hay dos formas en las que un elemento permanece seleccionado: cuando el usuario cambia una nota existente y cuando el usuario 
+navega hacia atras a la fuerza. El caso en que el usuario guarda una nota se soluciona con el cambio de codigo en la seleccion anterior que usa AllNotes.Move, por lo que no tiene que preocuparse por ese caso.
+
+El problema que tienes que resolver ahora esta relacionado con la navegacion. No importa como se navegue a vista de AllNotes NavigatedTo, el evento se genera para la pagina.
+Este evento es el lugar perfecto para anular la seleccion del elemento seleccionado en el CollectionView.
+
+Sin embargo, con el patron MVVM aplicado aqui, el modelo de vista no puede activar algo directamente en la vista, como borrar el elemento seleccionado despues de guardar la nota. Entonces ¿Como se consigue que esto suceda?
+Una buena implementacion de patron MVVM minimiza el codigo subyacente en la vista. Hay algunas formas diferentes de resolver este problema para admitir el patron de separacion MVVM. Sin embargo, tambien esta bien colocar el codigo en el codigo
+subyacente de la vista, especialmente cuando esta directamente vinculado a la vista. MVVM tiene muchos diseños y conceptos excelentes que lo ayudan a compartimentar su aplicacion, lo que mejora la capacidad de mantenimiento y le facilita la incorporacion
+de nuevas funciones. Sin embargo, en algunos casos puede encontrar que MVVM fomenta la ingenieria excesiva.
+
+-----------------
+
+Allow selecting a note twice
+
+In the AllNotes view, the CollectionView list all of the notes, but doesn't allow you to select the same note twice. There are two ways the item remains selected: when the user changes and existing note, and when the user forcible navigates backwards.
+The case where the user saves a note is fixed with the code change in previus section that uses AllNotes.Move, so you don't have to worry about that case.
+
+The problem you have to solve now is related to navigation. No matter how the Allnotes view is navigated to, the NavigatedTo event is raised for the page. This event is a peprfect place to forcibly the selected item in the CollectionView.
+
+However, with the MVVM patter being applied here, the viewmodel can't trigger something directly on the view, such as clearing the selected item after the note is saved. So how do you get that to happen? A good implementation of the MVVM patter minimizes 
+the code-behind in the view. There are a few different ways to solve this problem to support the MVVM separation patter. However, it's also OK to put code in the code-behind of the view, especially when it's directly tied to the view. MVVM has many great 
+desings and concepts that help you comparmentalize your app, improving maintainability and making it eaiser for you to add new features. However, in some cases, you may find that MVVM encourages overengineering.
