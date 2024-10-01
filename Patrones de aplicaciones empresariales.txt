@@ -1,0 +1,8 @@
+Patrones de aplicaciones empresariales que utilizan .NET MAUI
+
+Introduccion 
+Las aplicacioes empresariales se enfrentan a una serie de problemas dificiles de resolver, entre los que se incluyen los
+requisitos empresariales en constante cambio, la necesidad de tiempos de respuesta rapidos, la compatibilidad con multiples plataformas
+y la integracion con multiples sistemas.
+Debido a la naturaleza variable de estos problemas, es importante que la arquitectura de nuesrta aplicaciones permita que sea modular, modificable 
+y extensible a lo largo del tiempo.
