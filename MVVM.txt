@@ -1,0 +1,117 @@
+La experiencia del desarrollador de .NET MAUI generalmente implica crear una interfaz de usuario en XAML y luego agregar codigo subyacente que opera
+en la interfaz de usuario. Pueden surgir problemas de mantenimiento complejos a medida que se modifican las aplicaciones y crecen en tamaño y alcance. 
+Estos problemas incluyen al acoplamiento estrecho entre los controles de la interfaz de usuario y la logica empresarial, lo que aumenta el costo de realizar
+modificaciones en la interfaz de usuario y la dificultad de realizar pruebas unitarias de dicho codigo.
+
+El patron MVVM ayuda a separar claramente la logica de presentacion y de negocios de una aplicacion de su interfaz de usuario (UI). Mantener una separacion clara entre
+la logica de la aplicacion y la UI ayuda a abordar numerosos problemas de desarrollo y hace que una aplicacion sea mas facil de probar, mantener y desarrollar. Tambien puede
+mejorar significativamente las oportunidades de reutilizacion de codigo y permtite que los desarrolladores y los diseñadores de UI colaboren mas facilmente al desarrollar sus 
+respectivas partes de una aplicacion.
+
+--------------------------------
+
+The .NET MAUI developer experience typically involves creating a user interface in XAML, and then adding code-behind that operates on the user interface. Complex maintenance issues
+can arise as apps are modified and grow in size and scope. These issues include the tigt coupling between the UI controls and the buisness logic, wich increases the cost of making UI 
+modifications, and the difficulty of unit testing such code.
+
+The MVVM pattern helps cleanly separate an application's business and presentation logic from its user interface (UI). Maintaining a clean separation between application logic and the UI helps
+address numerous development issues and makes and application easier to test, maintain, and envolve. It can also significantly improve code re-use opportunities and allows developers and UI designers
+to collaborate more easily when developing their respective parts of an app.
+
+------------------------
+
+El patron MVVM
+
+El patron MVVM consta de tres componentes principales: el modelo, la vista y el modelo de vista. Cada uno cumple uno cumple una funcion especifica.
+
+Ademas de comprender las responsabilidades de cada componente, tambien es importante comprender como interactuan. En un nivel alto, la vista "conoce" el modelo de vista y el modelo de vista "conoce" el modelo,
+pero el modelo no conoce el modelo de vista y el modelo de vista no conoce la vista. Por lo tanto, el modelo de vista aisla la vista del modelo y permite que el modelo evolucione independientemente de la vista.
+
+Los beneficios de utilizar el patron MVVM son los siguientes:
+*** Si una implementacion de modelo existente encapsula la logica empresarial existente, puede resultar dificil o riesgoso cambiarla. En este escenario, el modelo de vista actua como un adaptador para las clases del modelo
+y evita que se realicen cambios importantes en el codigo del modelo.
+
+*** Los desarrolladores pueden crear pruebas unitarias para el modelo de vista y el modelo sin utilizar la vista. Las pruebas unitarias para el modelo de vista pueden ejercer exactamente la misma funcionalidad que utiliza la vista.
+
+*** La interfa de usuario de la aplicacion de puede rediseñar sin modificar el modelo de vista ni el codigo del modelo, siempre que la vista se implemente completamente en XAML o C#. Por lo tanto, en una nueva version de la vista deberia
+funcionar con el modelo de vista existente.
+
+*** Los diseñadores y desarrolladores pueden trabajar de forma independiente y simultanea en sus componentes durante el desarrollo. Los diseñadores pueden centrarse en la vista, mientras que los desarrolladores pueden trabajar en el modeo de vista
+y los componentes del modelo.
+
+La clave par ausar MVVM de manera efizaz radica en comprender como factorizar el codigo de la aplicacion en las clases correctas y como interactuan las clases.
+
+--------------------------------------
+
+The MVVM pattern
+
+There are three core components in the MVVM pattern: the model, the view, and the view model. Each servers a distinct purpose. The diagram belows shows the relationships between the threen components.
+
+In addition to understanding the responsabilities of each component, it's also imporntant to understand how they interact. At a high level, the view "knows about" the view model, and the view model "knows about" the mode, but the
+model is unaware of the view model, and the view model is unaware of the view. Therefore, the view model isolates the view from the model, and allows the model to envolve independently of the view.
+
+The benefits of using the MVVM pattern are as follows:
+
+***If an existing model implementation encapsulates existing bsiness logic, it can be difficult or risky to change it. In this scenario, the view model acts as and adapter for the model classes and prevents you from making major changes to the model code.
+
+***Developers can create unit tests for the view model and the model, without using the view. The unit test for the view model can exercise exactly the same functionality as used by the view.
+
+***The app UI can be redesigned without touching the view model and model code, provided that the view is implemented entirely in XAML or C#. Therefore, a new version of the view should work with the existing view model.
+
+***Designers and developers can work independently and concurrently on their components during development. Designers can focus on the view, while developers can work on the view model and model components.
+
+The key to using MVVM effectively lies in understanding how to factor app code into the correct classes and how the classes interact.
+
+View
+
+The view is reponsible for defining the structure, layout, and appearance of what the user sees on screen. Ideally, each view is defined in XAML, with a limtied code-behind that does not contain business logic. However, in some cases,
+the code-behind migth contain UI logic that implements visual behavior that is difficult to express in XAML, such as animations.
+
+In a .NET MAUI application, a vieew is typically a ContentPage- derived or ContentView- derived class. However, views can also be represented by a data template, wich specifies the UI elements to be used to visually represent an object 
+when it's displayed. A data template as a vview does not have any code-behind, and is designed to bind to a specific view model type.
+
+***Avoid enabling and disabling UI elements in the code-behind.
+
+Ensure that the view models are responsible fro defining logical state changes that affect some aspects of the view's display, such as wheter a command is avialbe, or an indication that an operation is pending. Therefore, enable and disable UI
+elements by binding to view model properties, rather than enabling and sisabling them in code-behind.
+
+There are several options for executing code on the view model in response to interactions on the view, such as a button click on item selection. If a control supports commands, the control's Command property can be data-bound to an ICommand property on the view
+model. When the control's command is invoked, the code in the view model will be executed.In object in the view and can listen for either a command to be invoked or the event to be raised. In response, the behavior can then invoke an ICommand on the view model
+or a method on the view model.
+
+------------------------------
+
+Vista
+
+La vista es responsable de definir la estructura, el diseño y la apariencia de lo que el usuario ve en la pantalla. Lo ideal es que cada vista se defina en XAML, con un codigo subyacente limitado que no contiene logica empresarial. Sin embargo, en algunos casos,
+el codigo subyacente puede contener logica de interfaz de usuario que implemente un comportamiento visual que es dificil de expresar en XAML, como animaciones.
+
+En una aplicacion .NET MAUI, una vista es normalmente una clases ContentPage derivada o ContentView derivada de una vista. Sin embargo, las vistas tambien pueden representarse mediante una plantilla de datos,
+que especifica los elementos de la interfaz de usuario que se utilizaran para representar visualmente un objecto cuando se muestre. Una plantilla de datos como vista no tiene ningun codigo subyacente y esta diseñada para vinculaese a un tipo de modelo de vista especifico.
+
+***Eevite habilitar y deshabilitar elemetnos de la interfaz de usuario en el codigo subyacente.
+
+Asegurese de que los modelos de vista sean responsables de definir los cambios de estado logicos que afectan algunos aspectos d ela visualizacion de la vista, como si un comando esta disponible o una indicacion de que una operacion esta pendiente. Por lo tanto, habilite y deshabilite
+los elementos de la interfaz de usuario mediante la vinculacion a las propiedades del modelo de vista, en lugar de habilitarlos y deshabilitarlos en el codigo subyacente.
+
+Existen varias opciones para ejecutar el codigo en el modelo de vista en respuesta a interacciones en la vista, como un clic en un boton o la seleccion de un elemento. Si un control admite comandos, la propiedad Command del control se puede vincular a una propiedad ICommand en el modelo de vista.
+Cuando se invoca el comando del control, se ejecuta el codigo en el modelo de vista. Ademas de los comandos, los comportamientos se pueden adjuntar a un objeto en la vista y pueden escuchar si se invoca un comando o si genera un evento, el comportamietno puede invocar un ICommand en el modelo de vista o 
+un metodo en el modelo de vista.
+
+----------------------
+
+ViewModel
+
+The view model implements properties and commands to wich the view can data bind to, and notifies the view of any state changes trough change notification events. The properties and commands that the view model provides define the functionality to be offered by the UI, but the view determines how that
+functionality is to be displayed.
+
+****Keep the UI responsive with asynchronous operations.
+
+Multi-platform apps should keep the UI thread unblocked to improve the user's perception of performance. Therefore, in the view model, use asyncrhonous methods for I/O operations and raise events to asyncrhonous notify views of property changes.
+
+The view model is also responsible for coordinating the view's interactions with any model classes that are required. There typically a on-to many relationship between the view model and the model classes. The view model migth choose to expose model classes directly to them. In this case, 
+the model classes will need to be designed to support data binding and change notification events.
+
+Each view model provides data from a model in a form that the view can easily consume. Ti accinokish this, the view model sometimes performs data converison. Placing this data conversion in the view model is a good idea because it provides properties that the view can bind to. For exammple, 
+the view model migth combine the values of two properties to make it easier to splay by the view.
+
