@@ -115,3 +115,61 @@ the model classes will need to be designed to support data binding and change no
 Each view model provides data from a model in a form that the view can easily consume. Ti accinokish this, the view model sometimes performs data converison. Placing this data conversion in the view model is a good idea because it provides properties that the view can bind to. For exammple, 
 the view model migth combine the values of two properties to make it easier to splay by the view.
 
+*** Centralize data conversions in a conversion layer.
+
+It's also possible to use converters as a separate data conversion layer that sits between the view model and the view. This can be necessary, for example, when data requires special formatting that the view model doesn't provide.
+
+In order for the view model to participate in two-way data binding with the view, its properties must raise the PropertyChanged event. View model satisfy this requirement by implementing the INotifyPropertyChanged interface, and raising the PropertyCHanged event when a property is changed.
+
+For collections, the view-friendly ObservableCollection<T> is provided. This collection implements collection changed notification, reileving the developer from having to implement the InotifyCollectionChanged interface on collections.
+
+------------------------------------------
+
+El modelo de vista implementa propiedades y comandos a los que la vista puede vincular datos y nitifica a la vista cualquier cambio de estado a traves de eventos de notificacion de cambios. Las propiedades y los comandos que proporciona el modelo de vista definen la funcionalidad que
+ofrecera la interfaz de usuario, pero la vista determina como se mostrara esa funcionalidad.
+
+*** Mantenga la interfaz de usuario responsiva con operaciones asincronicas.
+
+Las aplicaciones multiplataforma deben mantener el hilo de la interfaz de usuario bloqueado para mejorar la percepcion del rendimiento del usuario. Por lo tantom en el modelo de vista, utilice metodos asincronicos para las operaciones de E/S y genere eventos para notificar asincronicamente
+a las vistas sobre los cambios de propiedades.
+
+El modelo de vista tambien es responsable de coordinar las interacciones de la vista con cualquier clase de modelo que sea necesaria. Normalmente, existe una relacion de uno a muchos entre el modeo de vista y las clases de modelo. El modelo de vista puede optar por exponer las clases de 
+modelo directamente a la vista para que los controles de la vista puedan vincularse directamente a los datos de estas. En este caso, las clases de modelo deberan estar diseñadas para admitir la vinculacion de datos y los eventos de notificacion de cambios.
+
+Cada modelo de vista proporciona datos de un modelo en un formato que la vista puede consumir facilmente. Para lograr esto, el modelo de vista a veces realizar una conversion de datos. Colocar esta conversion de datos en el modelo de vista es una buena idea porque proporciona propiedades a las
+que la vista puede vincularse. Por ejemplo, el modelo de vista puede combinar los valores de dos propiedades para que sea mas facil de mostrar en la vista.
+
+*** Centralice las conversiones de datos en una capa de conversion.
+
+Tambien es posible utilizar convertidores como una capa de conversion de datos independiente que se ubica entre el modelo de vista y la vista. Esto puede ser necesario, por ejemplo, cuando los datos requieren un formato especial que el modelo de vista no proporciona.
+
+Para que el modelo de vista participe en la vinculacion de datos bidireccional con la vista, sus propiedades deben generar el PorpertChanged evento. Los modelos de vista satisfacen este requisito implementando la INotifyPropertyChanged interfaz y generando el PropertyChanged evento cuando se modifica
+una propiedad.
+
+Para las colecciones, se proporciona una interfaz facil de usar ObservableCollection<T>. Esta coleccion implementa la notificacion de cambios en la coleccion, lo que evita que el desarrollador tenga que implementar la INotifyCollectionChanged interfaz en las colecciones.
+
+-------------------
+
+Model
+
+Model classes are non-visual classes that encapsulate the app's data. Therefore, the model can be thougth of as representing the app's domain model, which usually includes a data model along with business and validation logic. Examples of model objects include data transfer objects (DTOs), Plain Old CLR (POCOs), 
+and generated entity and proxy objects.
+
+Model classes are typically used in conjunction with services or repositories that encapsulate data acces and caching.
+
+-----------------------
+
+Modelo
+
+Las clases del modelo son clases no visuales que encapsulan los datos de la aplicacion. por lo tanto, se puede pensar que el modelo representa el modelo de dominio de la aplicacion, que generalmente incluye un modelo de datos junto con la logica empresarial y de validacion. Algunos ejemplos de objetos de modelo
+incluyen objetos de transferencia de datos (DTO), objetos CLR simples (POCO) y objetos proxy y de entidad generados.
+
+Las clases de modelo generalmente se utilizan junto con servicios o repositorios que encapsulan el acceso a los datos y el almacenamiento en cache.
+
+-------------------------------
+
+Connecting view models to views 
+
+View models can be connected to views by using the data-binding capabilities of .NET MAUI. There are many approaches that can be used to construct views and view models and associate them a runtime. Theses approaches fall into two categories, 
+
+
