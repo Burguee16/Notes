@@ -171,5 +171,75 @@ Las clases de modelo generalmente se utilizan junto con servicios o repositorios
 Connecting view models to views 
 
 View models can be connected to views by using the data-binding capabilities of .NET MAUI. There are many approaches that can be used to construct views and view models and associate them a runtime. Theses approaches fall into two categories, 
+know as view first composition, and view model first composition. Choosing between view first composition and view model first composition is an issue of preference and complexity. However, all approaches share the same aim, wich is for the view to have a view model assigned
+to its BindingContext property.
 
+With view first composition the app is conveptually composed of views that connect to the view models they depend on. The primery benefit of this approach is that it makes it easy to construct loosely coupled, unit testable apps because the view models have no dependence on the views 
+themselves. It's also easy to understand the structure of the app by following its visual structure, rather than having to track code execution to understand how classes are created and associated. In addition, view first construction aligns with the Microsoft Maui's navigation system
+that's responsible for constructing pages when navigation occurs, wich makes a view model first composition complex and misaligned with the platform.
 
+With view model first composition, the app is conceptually composed of view models, with a service responsible for locating the view for a view model. View model first composition feels more natural to some developers, since the view creatin can be abstracted away, allowing them to focus on the logical non-UI structure of the app.
+In addtion, it allows view models to be created by other view models. However, this approach is often complex, and it can become difficult to understand how the various parts of the app are created and associated.
+
+***Keep view models and views independent.
+
+The binding of views a property in a data source should be the view's principal dependency on its corresponding view view. Specifically, don't reference view types, such as Button and ListView, from view models. By following the principles outlined here, view models can be tested in isolation, therefore reducing the likelihood of
+software defects by limiting scope.
+
+--------------------------------------------
+
+Conexion de modelos de vista a vistas
+
+Los modelos de vista se pueden conectar a las vistas mediante las capacidades de enlace de datos de .NET MAUI. Existen muchos enfoques que se pueden utilizar para construir vistas y mdoelos de vista y asociarlos en tipo de ejecucion.
+Estos enfoques se dividen en dos categorias , conocidas como composicion de vista primero y composicion de modelo de vista primero. Elegir entre composicion de vista primero y composicion de modelo de vista primero es una cuestrion
+de preferencia y complejudad. Sin embargo, todos los enfoques comparten el mismo objetivo, que es que la vista tenga un modelo de vista asignado a su propiedad BindingContext.
+
+Con la composicion de vista primero, la aplicacion se compone conceptualmente de vistas que se conectan a los modelos de vista de los que depeneden. El principal beneficio de este enfoque es que facilita la construccion de aplicaciones acopladas
+de forma flexible y que se pueden probar en unidades, ya que los modelos de vista no dependen de las vistas en si. Tambien es facil comprender la estructura de la aplcacion siguiendo su estructura visual, en lugar de tener que rastrear la ejecucion del codigo
+para comprender como se crean y asocian las clases. Ademas, la construccion de vista primero se alinea con el sistema de navegacion de Microsoft Maui, que es responsable de construir paginas cuando se produce la navegacion, lo que hace que la composicion de modelo de vista primero sea 
+compleja y no este alineada con la plataforma.
+
+Con la composicion del modelo de vista primero, la aplicacion se compone conceptualmente de modeos de vista, con un servicio responsable de ubicar la vista para un  modelo de vista. La composicion del modelo de vista primero resulta mas natural para algunos desarrolladores, ya que la creacion
+de la vista se puede abstraer, lo que les permite centrarse en la estructura logica no relacionada con la interfaz de usuario dela aplicacion. Ademas, permite que otros modelos de vista creen modelos de vista. Sin embargo, este enfoque suele ser complejo y puede resultar dificil de comprender como se crean 
+y asocian las distintas partes de la aplicacion.
+
+***Mantenga los modelos de vista y las vistas independientes.
+
+La vinculacion de vistas a una propiedad en una fuente de datos debe ser la dependencia principal de la vista en su modelo de vista correspondiente. En concreto, no haga referencia a tipos de vista, como Button y ListView, desde los modelos de vista. Si se siguen los principios que se describen aqui, 
+los modelos de vista se pueden probar de forma aislada, lo que reduce la probabilidad de defectos de software al limitar el alcance.
+
+-------------------------------
+
+Creacion de un modelo de vista de forma declarativa
+
+El enfoque mas simple es que la vista cree una instancia declarativa de su modelo de vista correspondiente en XAML. Cuando se construye la vista, tambien se construira el objeto de modelo de vista correspondiente. 
+Cuando ContentPage se crea el, LoginViewModel se construye  automaticamente una instancia de el y se establece como la de la vista BindingContext.
+
+Esta construccion declarativa y asignacion del modelo de vista por parte de la vista tiene ventaja de que es simple, pero tiene la desventaja de que requiere un costructor predeterminado (sin parametros) en el modelo de vista.
+
+----------------------
+
+Creating a view model declaratively
+
+The simplest approach is for the view to declaratively instantiate its corresponding view model in XAML. When the view is constructed, the corresponding view model object will also be constructed. 
+
+When the ContentPage is created, an instance of the LoginViewModel is automatically constructed and set as the view's BindingContext.
+
+This clarative construction and assignment of the view model by the view has the advantage that is's simple, but has the disadvantage that it requires a default (parameter-less) constructor in the view model.
+-----------------------------------
+
+Creacion de un modelo de vista mediante programacion
+
+Una vista puede tener codigo en el archivo de codigo subyacente, lo que hace que el modelo de vista se asigne a su BindingContext propiedad. Esto suele lograrse en el constructor de la vista.
+
+La construccion y asignacion programatica del modelo de vista dentro del codigo subyacente de la vista tiene la ventaja de ser simple, sin embargo, la principal desventaja de este enfoque es que la vista debe proporcionar
+al modelo de vista todas las dependencias necesarias. El usu de un contenedor de inyeccion de dependencias puede ayudar a mantener un acoplamiento flexible entre la vista y el modelo de vista.
+
+-------------------------
+
+Creating view model programmatically 
+
+A viewn can have code in the code-behind file, resulting in the view-model being assigned to its BindingContext properpty.
+
+The programmatic construction and assignment of the view model within the view's code-behind has the advantage that it's simple. However, the main disadvantage of this approach is that the view needs to provide the view model with any 
+required dependencies. Using a dependency injection containter can help to maintain loose coupling between the view and view model.
