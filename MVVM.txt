@@ -243,3 +243,86 @@ A viewn can have code in the code-behind file, resulting in the view-model being
 
 The programmatic construction and assignment of the view model within the view's code-behind has the advantage that it's simple. However, the main disadvantage of this approach is that the view needs to provide the view model with any 
 required dependencies. Using a dependency injection containter can help to maintain loose coupling between the view and view model.
+
+Updating views in response to changes in the underlying view model or model
+
+All view model and model classes that are accesible to a view should implement the INotifyPropertyChanged interface. Implementing this interface in a view model or model class allows the class to provide change notifications to any data-bound
+controls in the view when the underlying property value changes.
+
+App's should be architected for the correct use of property change notification, by meeting the following requirements:
+ *** Always raising a PropertyChanged event if a public property's value changes. Do not assume that raising the PropertyChanged event can be ignored because of knowledge of how XAML binding occurs.
+ *** Always raising a PropertyChanged event for any calculated properties whose values are used by other properties int he view model or model.
+ *** Always raising the PropertyChanged event at the end of the method that makes a property change, or when the object is known to be in a safe state. Raising the event interrupts the operation by invoking the event's handlers synchronously. If 
+this happens in the middle of an operation, it migth expose the object to callback functions when it is in an unsafe, partially updated state. In addition, it's possible for cascading changes to be triggered by PropertyCHanged events. Cascading changes 
+generally require updates to be complete before the cascading change is safe to execute.
+ *** Never raising a PropertyChanged event if the property does not change. This means that you must compare the old and new values before raising the PropertyChanged event.
+ ***Never raising more than one PropertyChanged event with the same property name argument within a single synchronous invocation of a public method of a class. For example, given a NumberOfItems property whose backing store is the _numerOfItems field,
+if a method increments _numerOfItems fifty times during the execution of a loop, it should only raise property change notification on the NumerOfItems property once, after the work is complete. For asynchronous methods, raise the ProertyChanged event for 
+a given property name in each synchronous segment of an asynchronous continuation chain.
+
+A simple way to provide this functionality would be to create an extension of the BindableObject class. 
+
+.NET MAUI's BindableObject class implements the INotifyPropertyChanged method. The ExtendedBindableObject class provides the RaisePropertyChanged method to invoke property change notification, and in doing so uses the functionality provided by the BindaleObject class.
+
+View model classes can then derive from the ExtendedBindableObject class. Therefore, each view model class uses the RaisePropertyChanged method in the ExtendedBindableObject class to provide property change notification. 
+
+---------------------------
+
+Actualizacion de vistas en respuesta a cambios en el modelo de vista subyacente o en el modelo
+
+Todos los modelos de vista y clases de modelos a los que se puede acceder desde una vista deben implementar la interfaz INotifyPropertyChanged. La implementacion de esta interfaz es un modelo de vista o una clase de modelo que permite que la clase proporcione notificaciones
+de cambios a cualquier control enlazado a datos en la vista cuando cambia el valor de la propiedad subyacente.
+
+Las aplicaciones deben estar diseñadas para el uso correcto de la notificacion de cambio de propiedad, cumpliendo los siguientes requisitos:
+
+ *** Siempre se genera un PropertyChanged evento si cambia el valor de una propiedad publica. No suponga que PropertyChanged se puiede ignorar la generacion del evento debido a que se conoce como se produce la vinculacion XAML.
+ *** Siempre se genera un PropertyChanged evento para cualquier propiedad calculada cuyos valores sean utilizados por otras propiedades en el modelo de vista o modelo.
+ *** Siempre se genera el PropertyChanged evento al final del metodo que realiza un cambio de propiedad o cuando se sabe que el objeto se encuentra en un estado seguro. Al generar el evento, se interrumpe la operacion invocando los controladores del evento de manera sincronica.
+Si esto sucede en medio de una operacion,  podria exponer el objeto de funciones de devolucion de llamada cuando se encuentra en un estado no seguro y parcialmente actualizado. Ademas, es posible que los cambios en cascada se activen mediante PropertyChanged eventos. Los cambios en cascada
+generalmente requieren que se completen las actualizaciones antes que sea seguro ejecutar el cambio en cascada.
+ *** Nunca se debe generar el PropertyChanged evento durante el constructor de un modelo de vista si se esta inicializando una propiedad. Los controles enlazados a datos en la vista no se habran suscrito para recibir notificaciones de cambios en este punto.
+ *** Nunca generar mas de un PropertyChanged evento con el mismo argumento de nombre de propiedad dentro de una unica invocacion sincronica de un metodo publico de una clase. Por ejemplo, dada una NumberOfItems propiedad cuyo almacen de respaldo es el _numberOfItems campo, si un metodo se incrementa
+_numberOfItems cincuenta veces durante la ejecucion de un bucle, solo deberia generar una notificacion de cambio de propiedad en la NumerOfImtes propiedad una vez, despues de que se complete todo el trabajo. Para los metodos asincronicos, genere el PropertyChanged evento para un nombre de propiedad
+determinado en cada segmento sincronico de una cadena de continuacion asincronica.
+
+Una forma sencilla de proporcionar esta funcionalidad seria crear una extension de la BinableObject clase.
+
+La clase .NET MAUI BindableObject implementa la INotifyPropertyChanged interfaz y proporciona un OnPropertyChanged metodo. La extendenBindableObject clase proporciona el RaisePropertyChanged metodo para invocar la notificaion de cambio de propiedad y, al hacerlo, utiliza la funcionalidad proporcionada
+por la BindableObject clase.
+
+Las clases del modelo de vista pueden derivarse de la ExtendenBindableObject clasae. Por lo tanto, cada clase del modelo de vista utiliza el RaisePropertyChanged metodo de la ExtendenBindableObject clase para proporcionar una notificacion de cambio de propiedad.
+
+Marcos MVVM 
+
+El patron MVVM esta bien establecido en .NET y la comunidad ha creado muchos marcos que ayudan a facilitar este desarrollo. Cada marco proporciona un conjunto diferente de caracteristicas, pero es estandar que proporcione un modelo de vista comun con una implementacion de la INotifyPropertyChanged interfaz. Las
+caracteristicas adicionales de los amrcos MVVM incluyen comandos personalizados, asistentes de navegacion, componenetes de inyectcion de dependencias/localizador de servicios e integracion de la plataforma de UI. Si bien no es necesario utilizar estos marcos, pueden acelerar y estandarizar su desarrollo.
+
+--------------------
+
+MVVVM Frameworks
+
+The MVVM pattern is well established in .NET, and the community has created many frameworks wich help ease this development. Each framework provides a different set of features, but it is standar for them to provide a common view model with an implementation of the INotifyPropertyChanged interface. Additional features
+of MVVM frameworks include custom commands, navigation helpers, dependencty injection/service locator components, and UI platform integration. While it is not necessary to use these frameworks, thy can speed up and standardize your development.
+
+UI interaction using commands and behaviors
+
+In multi-platform  apps, actions are typically invoked in response to a user action, such as a button click, that can be implemented by creating an event handler in the code-behind file. However, in the MVVM patter, the responsability for implementing the action lies with the view model, and placing code in the code-behind should be avoided.
+
+Commands provide a convenient way to represent actions that can be bound to controls in the UI. They encapsulate the code that implements the action and help to keep it decoupled from its visual representation in the view. This way, tour view models become more portable to new platforms, as they do not have a direct dependency on events provided by the
+platform's UI framework. .NET MAUI includes controls that can be declaratively connected to a command, and these controls will invoke the command when the user interacts with the control.
+
+Behaviors also allow controls to be declaratively connected to a command. However, behaviors can be used to invoke an action that's associated with a range of events raised by a control. Therefore, behaviors address many of the same scenarios as command-enabled controls, while providing a greater degree of flexibility and control. In addition, behabviors can 
+also be used to associate command objects or methods with controls that were not specifically designed to interact with commands.
+
+---------------------
+
+Interaccion de la interfaz de usuario mediante comandos y comportamientos
+
+En las aplicaciones multiplataforma, las acciones se suelen invocar en respuesta a una accion del usuario, como hacer clic en un boton, que se puede implementar mediante la creacion de un controlador de eventos en el archivo de codigo subyacente. Sin embargo, en el patron MVVM, la responsabilidad de implementar la accion reace en el modelo de vista y se debe evitar
+colocar codigo en el codigo subyacente.
+
+Los comadnos proporcionan una forma conveniente de representar acciones que se pueden vincular a controles en la interfaz de usuario. Encapsulan el codigo que implementa la accion y ayudan a mentelerlo desacoplado de su representacion visual en la vista. De esta manera, los modelos de vista se vuelven mas portatiles para las nuevas plataformas, ya que no tienen una dependencia
+directa de los eventos proporcionados por el marco de interfaz de usuario de la plataforma. .NET MAUI incluye controles que se pueden conectar de manera declarativa a un comando, y estos controles invocaran el comando cuando el usuario interactue con el control.
+
+Los comportatmientos tambien permiten que los controles se conecten de manera declarativa a un comando. Sin embargo, los comportameitnso se pueden utilizar para invocar una accion asociada con una serie de eventos generados por un control. Por lo tanto, los comportamientos abordan muchos de los mismos escenarios que los controles habilitados para comandos, al tiempo que brindan un mayor
+grado de flexibilidad y control. Ademas, los comportamientos tambien se pueden utilizar para asociar objetos o metodos de comadnos con controles que no fueron diseñados especificamente para interactuar con comandos.
