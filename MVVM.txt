@@ -326,3 +326,50 @@ directa de los eventos proporcionados por el marco de interfaz de usuario de la 
 
 Los comportatmientos tambien permiten que los controles se conecten de manera declarativa a un comando. Sin embargo, los comportameitnso se pueden utilizar para invocar una accion asociada con una serie de eventos generados por un control. Por lo tanto, los comportamientos abordan muchos de los mismos escenarios que los controles habilitados para comandos, al tiempo que brindan un mayor
 grado de flexibilidad y control. Ademas, los comportamientos tambien se pueden utilizar para asociar objetos o metodos de comadnos con controles que no fueron diseñados especificamente para interactuar con comandos.
+
+Implementando comandos
+
+Los modelos de vista pueden exponer propiedades publicas, para vincularlas desde la vista, que implementan la ICommand interfaz. Muchos controles y gestos de .NET MAUI proporcionan una Command propiedad, que puede vincularse a un ICommand objeto proporcionado por el modelo de vista. El control de boton es uno de los controles mas utilizados, ya que proporciona una propiedad de comando que se 
+ejecuta cuando se hace clic en el boton.
+
+**Nota 
+Si bien es posible exponer la implementacion real de la ICommand interfaz que utlizila su modelo de vista (por ejemplo, Command<T> O RelayCommand), se recomienda exponer sus comadnos publicamente como ICommand. De esta manera, si alguna vez necesita cambiar la implementacion en una fecha posterior, se puede cambiar facilmente.
+
+La ICommand interfaz define un Execute metodo que encapsula la operacion en si, un CanExecute metodo que indica si se puede invocar el comando y un CanExecuteChanged evento que se produce cuando se producen cambios que afecta a si se debe ejecutar el comando. En la mayoria de los casos, solo proporcionaremos el Execute metodo para nuestros comandos.
+
+Junto con .NET MAUI se proporcionand las clases Command y Command<T> que impolementan la ICommand interfaz, donde T es el tipo de los argumentos de Execute y CanExecute. Command y Command<T> son implementaciones basicas que proporcionan el conjunto minimo de funcionalidad necesaria para la ICommand interfaz.
+
+**Nota
+Muchos marcos MVVM ofrecen implementaciones de la interfaz con mas funciones ICommand.
+
+El constructor Command or Command<T> requiere un objeto de devolucion de llamada Action que se llama cuando ICommand. Execute se invoca el metodo. El CanExecute metodo es un parametro de constructor opcional y es una funcion que devuelve un valor booleano.
+
+El principal beneficio para las aplicaciones modernas es que AsyncRelayCommand proporciona una mejor funcionalidad para las operaciones asincronicas.
+
+-----------------------------
+
+Implementig commands
+
+View models tipically expose public properties, for binding from the view, wich implement the ICommand interface. Many .NET MAUI controls and gestures provide a Command property, wich can be data bound to an ICommand object provided by the view model. The button control is one of the most commonly used controls, providing a command property that executes when the button is clicked.
+
+***Note
+While it's possible to expose the actual implementation of the ICommand interface that your view model uses (for example, Command<T> or RelayCommand), it is recommended to expose your commands publicly as ICommand. This way, if you ever need to change the implementation at a later date, it can easily be swapped out.
+
+The ICommand interface defines an Execute method, wich encapsulates the operation itself, a CanExecute method, wich indicates whether the command can be invoked, and a CanExecuteChanged event that occurs when changes occur that affect wheter the command should execute. In most cases, we will only supply the Execute method for our commands. 
+
+Provided with .NET MAUI are the Command and Command<T> classes that implement the ICommand interface, where T is the type of the arguments to Execute and CanExecute. Command and Command<T> are basic implementations that provide the minimal set of functionality needed for the Icommand interface.
+
+**Note
+Many MVVM frameworks offer more feature rich implementations of the ICommand interface.
+
+The Command or Command<T> constructor requieres an Action callback object that's called when the ICommand.Execute method is invoked. The CanExecute method is an optional constructor parameter, and is a Func that returns a bool.
+
+Summary 
+
+The Model-View-ViewModel (MVVM) pattern helps cleanly seperate an application's business and presentation logic from its user interface (UI). Maintaining a clean separation between application logic and the UI helps address numerous development issues and makes an application easier to test, mainain, and evolver. It can also significantly improve code re-use opportunities and allows developers
+and UI designers to collaborate more easily when developing their respective parts of an app.
+
+Ussing the MVVM pattern, the UI of the app and the underlying presentation and business logic are separated into three separate classes: the view, wich encapsulates the UI and UI logic; the view model, wich encapsulates presentation logic and state; and the model, wich encapusaltes the app's buiness logic and data.
+
+
+
