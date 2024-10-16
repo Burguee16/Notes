@@ -1,0 +1,77 @@
+Dependency Injection
+
+Tupically, a class constructor is invoked when instantiating an object, and any values that the object needs are passed as arguments
+to the constructor. This is an example oof dependency injection known as constructor injection. The dependencies the object needs are injected into the 
+constructor.
+
+By specifying dependencies as interface types, dependency injection enables decoupling the concrete types from the code that depends on these types. It generally uses a container that
+holds a list of registrations and mappings between interfaces and abstract types, and the concrete types that implement or extend these types.
+
+There are also other types of dependency injection, such as property setter injection and method call injection, but they are less commonly seen. Therefore, this charpter will focus solely on performing constructor
+injection with a dependency injection container.
+
+
+----------------------------------
+
+Normalmente, se invoca un constructor de clase al crear una instancia de un objeto y todos los valores que necesita el objeto se pasan como argumentos al constructor. Este es un ejemplo de inyeccion de dependencias conocido
+como inyeccion de constructor. Las dependencias que necesita el objeto se inyectan en el constructor.
+
+Al especificar dependencias como tipos de interfaz, la inyeccion de dependecias permite desacoplar los tipos concretos del codigo que depende de estos tipos. Generalmente, utiliza un contenedor entre interfaces y tipos abstractos
+y los tipos concretos que implementan o extienden estos tipos.
+
+Tambien existen otros tipos de inyeccion de dependencias como la inyeccion de establecedores de propiedades y la inyeccion de llamadas a metodos, pero se observan con menos frecuencia. Por lo tanto, este capitulo se centrara unicamente en la realizacion
+de la inyeccion de constructores con un contenedor de inyeccion de dependencias.
+
+Introduccion a la inyeccion de dependencias
+
+La inyeccion de dependencias es una version especializada del patron Inversion de control (IoC), en el que lo que se invierte es el proceso de obtencion de la dependencia requerida. Con la inyeccion de dependencias, otra clase es responsable de inyectar dependencias
+en un objeto en tiempo de ejecucion. 
+
+private readonly ISettingsService _settingsService;
+private readonly IAppEnvironmentService _appEnvironmentService;
+
+public ProfileViewModel(
+    IAppEnvironmentService appEnvironmentService,
+    IDialogService dialogService, 
+    INavigationService navigationService, 
+    ISettingsService settingsService)
+    : base(dialogService, navigationService, settingsService)
+{
+    _appEnvironmentService = appEnvironmentService;
+    _settingsService = settingsService;
+
+    // Omitted for brevity
+}
+
+El ProfileViewModel constructor recibe varias instancias de objetos de interfaz como argumentos inyectados por otra clase. La unica dependencia en la ProfileViewModel clase es la de los tipos de interfaz. Por lo tanto, la ProfileViewModel clase no tiene conocimiento de la clase que es responsable
+de instanciar los objetos de interfaz. La clase que es responsable de instanciar los objetos de interfaz e insertarlos en la ProfileViewModel clase se conoce como contenedor de inyeccion de dependencias.
+
+Los contenedores de inyeccion de dependencias reducen el acoplamiento entre objetos al proporcionar una funcion para crear instancias de clases y administrar su duracion en funcion de la configuracion del contenedor. Durante la creacion de un objeto, el contenedor inyecta en el todas las dependencias que el objeto requiere.
+Si esas dependencias aun no se han creado, el contenedor crea y resuelve sus dependencias primero.
+
+El uso de un contenedor de inyeccion de dependencias tiene varias ventajas:
+ *** Un contenedor elimina la necesidad de que una clase localice sus dependencias y administre sus duraciones de vida.
+ 
+ *** Un contenedor permite el mapeo de dependencias implementadas sin afectar la clase.
+ 
+ *** Un contenedor facilita la capacidad de prueba al permitir simular dependencias.
+
+ *** Un contenedor aumenta la capacidad de mantenimiento al permitir que se agreguen facilmente nuevas clases a la aplicacion.
+
+En el contexto de una aplicacion .NET MAUI que utiliza MVVM, normalmente se utilizara un coontenedor de inyeccion de dependencia para registrar y resolver listas, registrar y resolver modelos de vista y para registrar servicios e inyectarlos en modelos de vista.
+
+Hay muchos contenedores de inyeccion de dependencias disponibles en .NET; la aplicacion multiplataforma eShop utiliza Microsoft.Extensions.DependencyInjection para administrar la instanciacion de vistas, modelos de vista y clases de servicio en la aplicacion.
+Microsoft.Extensions.DependencyInjection facilida la creacion de aplicaciones acopladas de forma flexible y proporciona todas las caracteristicas que se encuentran comunmente en los contenedores de inyeccion de dependencias, incluidos los metodos para registrar asignaciones de tipos e instancias de objetos, resolver objetos, administrar la duracion
+de los objetos e inyectar objetos dependientes en los constructores de los objetos que resuelve.
+
+En .NET MAUI, la MauiProgram clase llamara al CreateMauiApp metodo para crear un MauiAppBuilder objeto. El MauiAppBuilder objeto tiene una Services propiedad de tipo IserviceCollection, que proporciona un lugar para registar nuevos componentes, 
+como vistas, modelos de vista y servicios para la inyeccion de dependencias. Todos los componentes registrados con la Services propiedad se proporcionaran al contenedor de inyeccion de dependencias cuando MauiAppBuilder.Build se llame al metodo.
+
+En tiempo de ejecucion, el contenedor debe saber que implementacion de los servicios se estan solicitando para poder instanciarlos para los objetos solicitados. En la aplicacion multiplataforma eShop, las IAppEnvironmentService interfaces IDialogService, INavigationService y ISettingsService deben resolverse antes de poder instanciar un ProfileViewModel objeto.
+Esto implica que el contenedor realice las siguientes acciones:
+
+*** Decidir como instanciar un objeto que implementa la interfaz. Esto se conoce como registro.
+
+*** Instanciacion del objeto que implementa la interfaz requerida y el ProfileViewModel objeto. Esto se lo conoce como resolucion.
+
+Finalmente, la aplicacion dejara de usar el ProfileViewModel objeto y este quedara disponible para la recoleccion de elementos no utilizados. En este punto, el reconector de elementos no utilizados debe desechar cualquier implementacion de interfaz de corta duracion si otras clases no comparten la misma instancia.
