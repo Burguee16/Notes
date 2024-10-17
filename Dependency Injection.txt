@@ -75,3 +75,97 @@ Esto implica que el contenedor realice las siguientes acciones:
 *** Instanciacion del objeto que implementa la interfaz requerida y el ProfileViewModel objeto. Esto se lo conoce como resolucion.
 
 Finalmente, la aplicacion dejara de usar el ProfileViewModel objeto y este quedara disponible para la recoleccion de elementos no utilizados. En este punto, el reconector de elementos no utilizados debe desechar cualquier implementacion de interfaz de corta duracion si otras clases no comparten la misma instancia.
+
+--------------------------------
+
+Dependency injection is a specialized version of the Inversion of Control (IoC) pattern, where the concern being inverted is the process of obtaining the required dependency. With dependency injection, another class is responsible for injecting dependencies into an object at runtime. 
+
+The ProfileViewModel constructor receives multiple interface object instances as arguments injected by another class. The only dependency in the ProfileViewModel class is on the interface types.Therefore, the ProfileViewModel class doesn't have any knowledge of the class that's responsible fro instantiating the interface objects, and inserting it into the ProfileViewModel class, 
+known as the dependency injection container.
+
+Dependency injection containers reduce the coupling between onjects providing a facility to instanciate class instanes and manage their lifetime based on the configuration of the container. During object creation, the container injects any dependencies that the objects requires into it. if those dependencies have not yet been created, the container createes and resolves their dependencies first.
+
+There are several advantages to using a dependency injection container:
+
+*** A container removes the need for a class to locate its dependencies and manage its lifetimes.
+
+*** A container allows the mapping of implemented dependecies without affecting the class.
+
+*** A container facilitates testability by allowing dependencies to be mocked.
+
+*** A container increases maintainability by allowing new classes to be easily maintainability by allowing new classes to be easilty added to the app.
+
+In the context of a .NET MAUI app that uses MVVM, a dependency injection container will typically be used for registering and resolving views, registering and resolvig view models, and for registering services and injecting them into view models.
+
+There are many dependency injection containers available in .NET; the eShop multi-platform app uses Microsoft.Extensions.DependencyInjection to manage the instantiation of views, view models, and service classes in the app. Microsoft.Extensions.DependencyInjection facilitates building loosely coupled apps, and provides all of the features commonly found in dependency injection containers, including methods to register the mappings and object instances,
+resolve objects, manage object lifetimes, and inject dependent objects into constructors of objects that it resolves.
+
+In .NET MAUI, the MauiProgram class will call into the CreateMauiApp method to create a MauiAppBuilder object. The MauiAppBuilder object has a Services property of type IserviceCollection, wich provides a place to register our components, such as views, view models, and services for dependency injection. Any components registered with the Services property will be provided to the dependency injection container when the MauiAppBuilder.Build method is called.
+
+At runtime, the container must know wich implementation of the services are being requested in order to instantiate them for the requested objects. In the eShop multi-platform app, the IAppEnvironmentService, IDialogService, INavigationService, and ISettingService interfaces need to be resolved before it can instantiate a ProfileViewModel object. This involves the container performing the following actions:
+
+*** Deciding how to instantiate an object that implements the interface. This is known as registration.
+
+*** Instantiating the objects that implements the required interface and the ProfileViewModel object. This is known as resolution.
+
+Eventually, the app will finish using the ProfileViewModel object, and it will become aviable for garbage colleciton. At this point, the garbage collector should dispose of any short -lived interface implementations if other classes do not share the same instance.
+
+Registration
+
+Before dependencies can be injected into an object, the types of the dependencies must first be registered with the container. Registering a type involves passing the container an interface and a concrete type that implements the interface.
+
+There are two ways of registering types and objects in the container through code:
+
+*** Register a type or mapping with the container. This is kwnon as transient registration. When required, the container will build an instance of the specified type.
+
+*** Register an existing object in the container as a singleton. When required, the container will return a reference to the existing object.
+
+***NOTE***
+Dependency injection containers are not always suitable. Dependency injection instroduces additional complexity and requirements that migth not be appropiate or useful to small apps. If a class does not have any dependencies, or is not a dependency for other types, it migth not make sense to put in the container. In addition, if a class has a single set of dependencies that are integral to the type and will never change, it
+migth not make sense to put in the container.
+
+The registration of types requiring dependency injection should be performed in a single method in an app. This method should be invoked early in the app's lifecyrcle to ensure it is aware of the dependencies between its classes. The eShop multi-platform app performs this the MauiProgram.CreateMauiApp method. 
+
+The MauiApp.CreateBuilder method creates a MauiAppBuilder object that we can use to register our dependencies. Many dependencies in the eShop multi-platform app need to be registered, so the extension methods RegisterAppServices, RegisterViewModels, and RegisterViews were created to help provide an organized and maintainable registration workflow.
+
+This method receives an instance of MauiAppBuilder, and we can use the Services property to register our view models. Dependeing on the needs of your application, you may need to add services with different lifetimes. The following table provides information on when you may want to choose theses different registration lifetimes:
+
+AddSingleton<T> - Will create a single instance of the object which will be remain for the lifetime of the application.
+
+AddTransient<T> - Will create a new instance of the object when requested during resolution. Transient objects do not have a pre-defined lifetime, but will typically follow the lifetime of their host.
+
+The view models do not inherit from an interface, so they onle need their concrete type provided to the AddSingleton<T> and AddTransient<T> methods.
+
+The CatalogViewModel is used near the application's root and should always be available, so registering it with AddSingleton<T> is beneficial. Other view models, such as CheckoutViewmodel and OrderDetailViewmodel are situatiolnally navigated to or are used later in the application.
+Suppose you know that you have a component that may not always be used. In that case, if is memory or computionallu intensive or requires just-in-time-data, it may be a better candidate for AddTransient<T> registration.
+
+Another coomon way to add services is using the AddSingleton<Tservice, TImplementation> and AddTransient<TService, TImplementation> methods. These methods take two input types: the interface definition and the concrete implementation. This type of registration is best for cases where you are implementing services based on interfaces. 
+
+Once all services have been registered, the MauiAppBuilder.Build method should be called to create our MauiApp and popilate our dependency injection container with all the registered services.
+
+***IMPORTANT***
+Once the Build method has been called, the dependency injection container is immutable and can no longer be updated or modified. Ensure that all services that you need within ypur application have been registered before you call Build.
+
+Resolution
+
+After a type is registered, it can be resolved on injected as a dependency. When a type is being resolved, and the container needs to create a new instance, it injects any dependencies into the instance.
+
+Generally, when a type is resolved, one of three things happens:
+1-If the type hasn't been registered, the container throws an exception.
+2-If the type has been registered as a singleton, the container returns the singleton instance. If this is the first time the type is called for, the container creates it if required and maintains a reference to it.
+3-If the type has been registered as transient, the container returns a new instance and doesn't maintain a reference to it.
+
+.NET MAUI offers a number of ways to resolve registered components based on your needs. The most direct way to gain access to the dependency injection container is from an Element using the Handler.MauiContext.Services. 
+
+This can be helpful if you need to resolve a service from within an Element or from outside of the constructor of your Element.
+
+***CAUTION***
+There is a possibility that the Handler property of your Element may be null, so be aware that you may need to handle those situations. 
+
+If using the Shell control for .NET MAUI, it will implicitly call into the dependency injection container to create our objects during navigation. When setting up our Shell control, the Routing.RegisterRoute method will tie a route path to a View.
+
+During Shell navigation, it will look for registrations of the FiltersView, and if any are found, it will create that view and inject any dependencies into the constructor. 
+
+***TIP***
+The dependency injection container is great for creating view model instances. If a view model has dependencies, it will handle the creation and injection of any required services. Just make sure that your register your view models and any dependencies that they
+may have with the CreateMauiApp method in the MauiProgram class.
