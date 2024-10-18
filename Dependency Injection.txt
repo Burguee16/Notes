@@ -169,3 +169,77 @@ During Shell navigation, it will look for registrations of the FiltersView, and 
 ***TIP***
 The dependency injection container is great for creating view model instances. If a view model has dependencies, it will handle the creation and injection of any required services. Just make sure that your register your view models and any dependencies that they
 may have with the CreateMauiApp method in the MauiProgram class.
+
+If using the Shell control for .NET MAUI, it will implicity call into the dependency injection container to create our objects during navigation. When setting up or Shell control, the Routing.RegisterRoute method will tie a route path to a View as shown in the example below:
+Routing.RegisterRoute("Filter", typeof(FiltersView));
+
+During Shell navigation, it will look for registrations of the FiltersView, and if any are found, it will create that view and inject any dependencies into the constructor. As shown in the code example below, the CatalogViewModel will be injected into the FiltersView:
+
+namespace eShop.Views;
+
+public partial class FiltersView : ContentPage
+{
+    public FiltersView(CatalogViewModel viewModel)
+    {
+        BindingContext = viewModel;
+
+        InitializeComponent();
+    }
+}
+
+***TIP***
+The dependency injection container is great for creating view model instances. If a view model has dependencies, it will handle the creation and injection of any required services. Just make sure that you register you view models and any dependencies that they may have with the CreateMauiApp 
+method in the MauiProgram class.
+
+Summary
+
+Dependency injection enables the decoupling of concrete types from the code that depends on these types. It typically uses a container that holds a list of registrations and mappings between interfaces and abstract types, and the concrete types that implement or extend these types.
+
+Microsoft.Extensions.DependencyInjection facilitates building loosely coupled apps and provides all of the features commonly found in dependency injection containers, including methods to register type mappings and object instances, resolve objects, manage object lifetimes, and inject dependent objects into constructors of objects it resolves.
+
+--------------------------------------------------------------------------
+
+Introduccion a la inyeccion de dependencia 
+
+La inyeccion de dependencias es una version especializada del patron Inversion de control (IoC), en el que se invierte el proceso de obtencion de la dependencia requerida. Con la inyeccion de dependencias, otra clase es responsable de inyectar dependencias en un objeto en tiempo de ejecucion. 
+
+El ProfileViewModel constructor recibe varias instancias de objetos de interfaz como argumentos inyectados por otra clase. La unica dependencia en la ProfileViewModel clase es la de los tipos de interfaz. Por lo tanto, la ProfileViewModel clase no tiene conocimiento de la clase que es responsable de instanciar los objetos de interfaz. La clase que es responsable
+de instanciar los objetos de interfaz e insertarlos en la ProfileViewModel clase se conoce como contenedor de inyeccion de dependencias.
+
+Los contenedores de inyeccion de dependencias reducen el acoplamiento entre objetos al proporcionar una funcion para crear instancias de clases y administrar su duracion en funcion de la configuracion del contenedor. Durante la creacion de un objeto, el contenedor inyecta en el todas las dependencias que el objeto requiere. Si esas dependencias aun no se han creado, el contenedor crea y
+resuelve sus dependencias primero.
+
+** Un contendor elimina la necesidad de que una clase localice sus dependencias y administre sus duraciones de vida.
+
+** Un contenedor permite el mapeo de dependencias implementadas sin afectar la clase.
+
+** Un contendor facilita la capacidad de prueba al permitir simular dependencias.
+
+** Un contenedor aumenta la capacidad de mantenimiento al permitir que se agreguen facilmente nuevas clases a la aplicacion.
+
+En el contexto de una aplicacion .NET MAUI que utiliza MVVM, normalmente se utilizara un contenedor de inyeccion de dependencia para registrar y resolver vistas, registrar y resolver modelos de vista y para registrar servicios e inyectarlos en modelos de vista.
+
+Hay muchos contenedores de inyeccion de dependencias disponibles en .NET; la aplicacion multiplataforma eShip utiliza Microsoft.Extensions.DependencyInjection para administrar la instalacion de vistas, modelos de vista y clases de servicio en la aplicacion.
+Microsoft.Extensions.DependencyInjection facilita la creacion de aplicaciones acopladas de forma flexible y proporciona todas las caracteristicas dque se encuentran comunmente en los contenedores de inyeccion de dependencias, incluidos los metodos para registrar asignaciones de tipos e instancias de objetos, resolver objetos, administrar la duracion de los objetos e inyectar objetos dependientes en los constructores de los objetos que resuelve.
+
+En .NET MAYU, la MauiProgram clase llamara al CreateMauiApp metodo para crear un MauiAppBuilder objeto. El MauiAppBuilder objeto tiene una Services propiedad de tipo IServiceCollection, que proporciona un lugar para registrar nuestros componentes, como vistas, modelos de vista y servicios para la inyeccion de dependencias. Todos los componentes registrados con la Services propiedad se proporcionaran al contenedor de inyeccion de dependencias cuando MauiAppBuilder se llame al metodo.
+
+En tiempo de ejecucion, el contendor debe saber que implementacion de los servicios se estan solicitando para poder instanciarlos para los objetos solicitados. En la aplicacion multiplataforma eShop, las IAppEnviromentService interfaces IDialogService, INavigationService, y ISettingService deben resolverse antes de poder instanciar un ProfileViewModel objeto. Esto imploca que el contenedor realice las siguientes acciones:
+
+** Decidir como insntanciar un objeto que implementa la interfaz. Esto se conoce como registro.
+
+** Instalacion del objeto que implementa la interfaz requerida y el ProfileViewModel objeto. Esto se conoce como resolucion.
+
+Finalmente, la aplicacion dejara de usar el ProfileViewModel objeto y este quedara disponible para la recoleecion de elementos no utilizados. En este punto, el recolector de elemtos no utilizados debe desechar cualquier implementacion de interfaz de corta duracion si otras clases no comparten la misma instancia.
+
+Registro
+Antes de poder inyectar dependencias en un objeto, primero se deben registrar los tipos de dependencias en el contenedor. Para registrar un tipo, es necesario pasarle al contenedor una interfaz y un tipo concreto que implemente la interfaz. Hay dos formas de registrar tipos y objetos en el contenedor a traves del codigo:
+
+** Registrar un tipo o una asignacion con el contenedor. Esto se conoce como registro transitorio. Cuando sea necesario, el contenedor creara una instancia del tipo especificado.
+
+** Registrar un objeto existente en el contenedor como singleton. Cuando sea necesario, el contenedor devolvera una referencia al objeto existente.
+
+**NOTA** 
+Los contenedores de inyeccion de dependencias no siempre son adecuados. La inyeccion de dependencias introduce complejidad y requisitos adicionales que podrian no ser apropiados o utilies para aplicaciones pequeñas. Si una clase no tiene ninguna dependencia, o no es una dependencia para otros tipos, podria no tener sentido tocarla en el contenedor.
+Ademas, si una clase tiene un unico conjunto de dependencias que son parte integral del tipo y nunca cambiaran, podria no tener sentido colocarla en el contenedor.
+
