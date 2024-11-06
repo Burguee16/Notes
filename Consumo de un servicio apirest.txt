@@ -351,5 +351,36 @@ The REST service sends an HTTP status code in its reponse, which can be obtained
 
 Eliminacion de datos
 
-El metodo 
+El metodo HttpClient.DeleteAsync se usa para enviar una solicitud DELETE al servicio web especificado por el URI y, a continuacion, recibir la respuesta del servicio web:
+
+public async Task DeleteTodoItemAsync(string id)
+{
+    Uri uri = new Uri(string.Format(Constants.RestUrl, id));
+
+    try
+    {
+        HttpResponseMessage response = await _client.DeleteAsync(uri);
+        if (response.IsSuccessStatusCode)
+            Debug.WriteLine(@"\tTodoItem successfully deleted.");
+    }
+    catch (Exception ex)
+    {
+        Debug.WriteLine(@"\tERROR {0}", ex.Message);
+    }
+}
+
+El servicio REST envia un codigo de estado HTTP en su respuesta, que se puede obtener de la propiedad HttpResponseMessage.IsSuccessStatusCode, para indicar si la solicitud HTTP se realizo correctamente o no. Las respuestas tipicas para esta operacion son:
+**204 (NO CONTENT): la solicitud se ha procesado correctamente y la respuesta esta en blanco intencionadamente.
+**400 (BAD REQUEST): el servidor no entiende la solicitud.
+**404 (NOT FOUND): el recurso solicitado no existe en el servidor.
+
+-----------------------------
+
+Local development
+
+If you're developing a REST web service locally with a framework such as ASP.NET Core Web API, you can debug your web service and .NET MAUI app at the same time. In this scenario, to consume your web service over HTTP from android emulators and iOS simulators, you must enable clear-text HTTP traffic in your .NET MAUI app.
+
+Desarrollo local
+
+Si vas a desarrollar un servicio web REST localmente con un marco como ASP.NET Core Web API, puedes depurar el servicio web y la aplicacion .NET MAUI al mismo tiempo. En este escenario, para consumir el servicio web a traves de HTTP desde Android Emulators y simuladores de iOS, debes habilitar el trafico HTTP de texto no cifrado en la aplicacion .NET MAUI.
 
