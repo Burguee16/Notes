@@ -1,0 +1,87 @@
+Introduccion a jupyter
+
+Jupyter es una aplicacion web de libre acceso que permite crear y compartir documentos que contienen ecuaciones, codificacion en vivo, visualizaciones y texto narrativo.
+Jupyter ofrece un entorno informatico interactivo compatible con varios lenguajes de programacion, como Python, R, Julia, etc.., pero brilla mas cuando se utiliza con Python. Jupyter gira en torno a los notebooks,
+documentos que contienen una mezcla de codigo, visualizaciones, texto narrativo, ecuaciones y contenido multimedia. Estos Notebooks permiten a los usuarios crear, compartir y colaborar en proyectos computacionales sin problemas.
+
+Por que jupyter?
+
+La popularidad de jupyer proviene de su flexibilidad y facilidad de uso. Independientemente de su nivel de conocimientos de programacion, tanto si es un programador experimentado como si se esta embarcando en su viaje por la ciencia de datos, jupyter ofrece una plataforma
+intuitiva para escribir, probar y compartir codigo. Su interfaz interactiva permite la exploracion de datos, la experimentacion con algoritmos y la visualizacion de resultados, todo ello perfectamente integrado en un entorno unificado.
+
+Caracteristicas clave de jupyter
+
+1- Computacion interactiva: Los notebooks de jupyter permiten a los usuarios escribir y ejecutar codigo de forma interactiva. Esto significa que puede ejecutar celdas de codigo individualmente y ver el resultado inmediatamente, fomentando un enfoque iterativo de la codificacion y la experimentacion.
+
+2- Compatibilidad con varios idiomas: Aunque jupyer se desarrollo inicialmente para Python (de ahi su nombre, que significa Julia, Python y R), ahora es compatible con varios lenguajes de programacion a traves de su sistema de nucleo. Esta flexibilidad hace que jupyter sea adecuado para diversas tareas computacionales 
+y para la colaboracion interdisciplinar.
+
+3- Salida enriquecida: Los notebooks de jupyter admiten la integracion de medios enriquecidos, lo que permite a los usuarios generar graficos interactivos, diagramas, imagines, videos y mucho mas directamente dentro del documento. Esto facilida la visualizacion de datos, la comunicacion de resultados y la creacion de narrativas 
+convincentes.
+
+4- Integracion con bibliotecas de ciencia de datos: Jypyter se integra a la perfeccion con bibliotecas y marcos de trabajo populares utilizados en el ecosistema de la ciencia de datos, como NumPy, Pandas, Matplotlib, sci-kit-learn, TensorFlow y PyTorch. Esto permite a los usuarios aprovechar toda la potencia de estas herramientas dentro del entorno del cuaderno
+para tareas como la manipulacion de datos, la visualizacion, el aprendizaje automatico y el aprendizaje profundo.
+
+5- Colaboracion y uso compartido: Jupyter promueve la colaboracion y la reproducibilidad al permitir a los usuarios compartir sus notebooks con otros a trabes del correo electronico, github o el visor de notebook de jupyter. Esto facilita el intercambio de conocimientos, la revision por pares y la colaboracion interdisciplinar, ya que los usuarios pueden intercambiar facilmente
+ideas, fragmentos de codigo y mejores practicas.
+
+Jupyter en la ciencia de datos
+
+Jupyter se ha convertido en una herramienta indispensable para invertigadores, analistas y desarrolladores en ciencia de datos. Su perfecta integracion con bibliotecas tan populares como NumPu, Pandas y Sci.kit.kearn lo convierten en la mejor opcion para la manipulacion de datos, el analisis y el aprendizaje automatico. Jupyter ofrece una interfaz facil de usar, capacidades interactivas y solidas funciones de colaboracion,
+lo que lo convierte en una herramienta esencial para cualquiera que se dedique al analisis de datos, la investigacion cientifica, la educacion o el desarrollo de sofware. Tanto si explora datos como si construye modelos de aprendizaje automatico, imparte una clase o lleva a cabo una investigacion, Jupyter le permite trabajar de forma mas eficiente y compartir sus conocimientos con los demas.
+
+Resumen Modulo  1
+
+Python puede distinguir entre tipos de datos como enteros, flotantes, cadenas y bolleanas.
+
+Los enteros son numeros enteros que pueden ser positivos o negativos.
+
+Los flotantes incluyen enteros asi como numeros decimales entre los enteros.
+
+Puede convertir enteros en flotantes utilizando el typecasting, pero no puede convertir un flotante en un entero.
+
+Puede convertir enteros y flotantes en cadenas.
+
+Las expresiones en Python son una combinacion de valores y operaciones utilizadas para producir un unico resultado.
+
+Las expresiones realizan operaciones matematicas como suma, restas, multiplicacion, etc.
+
+Utilizamos "//" para redondear divisiones enteras, dando como resultado valores flotantes.
+
+Python sigue el orden de las operaciones (BODMASS) para realizar operaciones con expresiones multiples.
+
+Las variables almacenan y manipulan datos, permitiendole acceder y modificar valores a lo largo de su codigo.
+
+El operador de asignacion "=" asigna un valor a una variable.
+
+"." denota el valor de la variable dentro del codigo.
+
+La asignacion de otro valor a la misma variable anula el valor anterior de esa variable.
+
+Puede realizar operaciones matematicas con variables utilizando la misma variable o variables diferentes.
+
+Al realizar operaciones con distintas variables, la modificacion de un valor en una variable provocara cambios en las demas variables.
+
+Las operaciones con cadenas en pyton implican la manipulacion de datos de texto mediante tareas como la indexacion, la concatenacion, el troceado y el formateado.
+
+Una cadena suele escribirse entre comillas dobles o simples, incluyendo letras, espacios en blanco, digitos o caracteres especiales.
+
+Una cadena se adjunta a otra varibale y es una secuencia ordenada de caracteres.
+
+Los caracteres de una cadena identifican sus numeros indice, que pueden ser positivos o negativos.
+
+Utilizamos las cadenas como una secuencia para realizar operaciones de secuencia.
+
+Puede introducir un valor de longitud para realizar cortes mientras opera con una cadena.
+
+Operaciones como hallar la longitud de la cadena, combinar, concatenar y replicar, dan como resultado una nueva cadena.
+
+No puede modificar una cadena existente, son inmutables.
+
+Puede realizar secuencias de escape utilizando "" para cambiar la posicion de la cadena.
+
+En pyton, puede realizar tareas como buscar, modificar y dar formato a los datos de texto con sus funciones de metodos de cadena predefinidos.
+
+Ustede aplica un metodo a una cadena para cmabiar su valor, dando como resultado otra cadena.
+
+Puede realizar acciones como cambiar las mayusculas y minusculas de los caracteres de una cadena, sustituir elementos de una cadena, encontrar elementos d euna cadena, etx, utilizando los metodos de cadena predefinidos.
