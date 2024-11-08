@@ -17,3 +17,11 @@ moreover - ademas
 stride - paso
 slicing - rebanar
 beginning - comienzo
+handling - manejo
+issues - asuntos
+sheet - hoja
+recognized - conocida
+fetch - buscar
+knowledge - conocimiento
+encompasses - abarca
+findings - recomendaciones
