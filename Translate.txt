@@ -25,3 +25,12 @@ fetch - buscar
 knowledge - conocimiento
 encompasses - abarca
 findings - recomendaciones
+rough - basico
+doubt - duda
+stateful - con estado
+common - comun
+achieve - lograr
+Instead - en vez(en lugar de...)
+toggle - alternar
+sense - sentido
+shapes - formas

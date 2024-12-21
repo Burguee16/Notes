@@ -1,0 +1,82 @@
+Flutter for Android developers
+
+This document is meant for Android developers looking to apply their existing Android knowledge to build bolibe apps with
+Flutter. If you understand the fundamentals of the Android framewok then you can use this document as a jump start to Flutter development.
+
+Your Android knowledge and skill set are higly valuable when building with Flutter, because Flutter relies on the mobile operating system for numerous 
+capabilities and configurations. Flutter is a new way to build Uis for mobile, but it has a plugin system to communicate with Android
+(and iOs) for non-UI tasks. If you're an expert with Android, you don't have to relearn everything to use Flutter.
+
+This document can be used as a cookbook by jumping around and finding questions thar are most revelant to your nedds.
+
+In android, the View is the foundation of everything that shows up on the screen. Buttons, toolbars, and inputs, everything ias a View. In flutter, the rough
+equivalent to a View is a Widget. Widgets don't map exactly to Android views, but while you're getting acquainted whit how Flutter works you can think of them as
+"the way you declare and construc UI".
+
+Hoewver, these have a few differences to a View. To start, widgets have a different lifespan: they are inmutable and only exist until they need to be changed. Whenever widgets
+or their state change, Flutter's framework creates a new tree of widget instances. In camparison, an Android view is drawn once and does not redraw until invalidate is called.
+
+Flutter widget's are lightweight, in part due to ther inmutability. Because they aren't views themselves, and aren't directly drawing anything, but rather are a description of the 
+UI and its semantics that get "inflated" into actual view objects under the hood.
+
+Fultter includes the material Components library. These are widgets that implement the Material Design guidelines. Material Design is a flexible design system optimized for all plataforms, including iOs.
+
+But Flutter is flexible and expressive enough to implement any design lenguage. For example, on iOS, you can use the Cupertino widgets to produce an interface that looks like Apple's iOS design languaje.
+
+How do i update widgets?
+
+In Android, you update your views by directly mutating them. However, in Flutter, Widgets are inmutable and are not updated directly,
+instead you have to work with the widget's state.
+
+This is where the concept of Stateful and stateless widgets comes from. A statelessWidget is just what it sounds like-a widget with no state information.
+
+StatelessWidgets are useful when the part of the user interface you are describing does not depend on anything other than the configuration information in the object.
+
+For example, in Android, this is similar to placing an ImageView with your logo. The logo is not going to change duren runtime, so use a StatelessWidget in Flutter.
+
+If you want to dynamically change the UI bassed on date received after making an HPPT call or user interaction then you have to work with StatefullWidget and tell the Flutter framework that
+the widget's state has been updated so it can update the widget.
+
+The important thing to note here is at the core both stateless and stateful widgets behave the same. They rebuild every frame, the difference is the statefulwidget has a state object
+that stores state data across frames and restores it.
+
+If you are doubt, then always remember this rule: if a widget changes(because of user interactions, for example) it's stateful. However, if a widget reacts to change, the containing parent widget can still be stateless if it doesn't
+itself react to change.
+
+The following examples shows hot to use a StatelessWidget. A common StatelesWidget is the Text widget. If you look at the implementation of the Text widget you'll find that it subclasses StatelesWidget.
+
+Text(
+     'I lije Flutter!'
+     style: TextStyle(fontWeight: FontWeight.bold),
+    );
+
+As you can see, the Text Widget has no state information associated with it, it renders what is passed in its constructors and nothing more.
+
+But. what if you want to make "I like Flutter" change dynamically, for example when clicking a FloatingActionButton?
+
+To achieve this, wrap the Text widget in a StatefulWidget and update it when the user clicks the button.
+
+How do i lay out my widgets? Where is mi XML layout file?
+
+In Android, you write layouts in XML, but in Flutter you write your layouts with a widget tree.
+
+How do i add or remove component from my layout?
+
+In Android, you call addChild() or removeChild() on a parent to dynamically add or remove child views. In Flutter,
+because widgets are inmutable there is no direct equivalnt to addChild(). Instead, you can pass a function to the parent that returns a widget, and control that child's creation with a bollean flag.
+
+How do i animate a widget?
+
+In Android, you either create animations using XML, or call the animate() method on a view. In Flutter, animate widgets using the animation library by wrapping widgets inside an animated widget.
+
+In Flutter, use an AnimationController which an Animation<double> that can pause, seek, stop and reverse the animation. It requires a Ticker that signals when vsync happens, and produces a linear interpolation 
+between 0 and 1 on each frame while it's running. You then create one or more Animations and attach them to the controller.
+
+For example, you migth use CurvedAnimation to implement an animation along an interpolated curve. In this sense, the controller is the "master" source of the
+animation progress and the CurverAnimation computes the curve that replaces the controller's default linear motion. Like widgets, animations in Flutter work whit composition.
+
+When building the widget tree you assign the Animation to an animated property of a widget, such as the opacity of a FadeTransition, and teel the controller to start the animation.
+
+How do i use a Canvas to draw/paint?
+
+In Android, yo would use the Canvas and Drawable to draw images and shapes to the screen.
